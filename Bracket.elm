@@ -1,20 +1,15 @@
 module Bracket where 
 
-
 import Html exposing (..)
+import Html.Events exposing (on, targetValue, onClick)
 import Html.Attributes exposing (..)
---import Html.Events exposing (onClick, targetValue)
 import Signal exposing (Address)
 import StartApp.Simple as StartApp
 import String exposing (..)
+import Dict exposing (..)
+import List.Extra as Listx exposing (find)
 
 -- import BingoUtils as Utils 
-
-import String exposing (toInt)
-import Html exposing (Attribute)
-import Html.Events exposing (on, targetValue)
-import Signal exposing (Address)
-
 
 onInput : Address a -> (String -> a) -> Attribute
 onInput address f =
@@ -22,13 +17,12 @@ onInput address f =
 
 
 
-
 -- MODEL
 
 type alias BPair = {
   opener: Char, 
-  closer: Char,
-  isEnabled: Bool,
+  closer: Char,      -- corresponding closer
+  isEnabled: Bool,   -- is the bracket pair enabled?
   id: Int
 }
 
@@ -37,23 +31,27 @@ type alias BMap = List BPair
 type alias Model =
   {
     expression: String, 
-    bmap: BMap 
+    stack: SStack,
+    bmap: BMap
   }
 
- 
-newPair : Char -> Char -> BPair
-newPair op cl =
+-- Constructor function for creating new pairs 
+newPair : Char -> Char -> Bool -> Int -> BPair
+newPair op cl en id =
   { opener = op,
     closer = cl,
-    isEnabled = True,
-    id = 0
+    isEnabled = en,
+    id = id
   }
 
 
+-- UPDATE 
 
 type Action
   = NoOp
   | UpdateExpression String
+  | Mark Int
+
 
 
 update : Action -> Model -> Model
@@ -64,15 +62,77 @@ update action model =
   
     UpdateExpression contents ->
         { model | expression = contents }
+    Mark id ->
+        let
+          updateEntry e =
+            if e.id == id then { e | isEnabled = (not e.isEnabled) } else e
+        in
+          { model | bmap = List.map updateEntry model.bmap }
 
-
-        
 ---- Validator Related 
 
-validateString: String -> List BPair -> Bool 
-validateString s bmap = 
+{-
+updateRec : Model -> String -> Maybe SStack -> Model 
+updateRec r fields = 
+  case fields of 
+    [a] -> { r | expression = a }
+    [a,b] -> { r | expression = a, stack = b }
+    [a,b,c] -> { r | expression = a, stack = b, bmap = c }
+    _ -> r
+
+updateRec : Model -> Maybe String -> Maybe SStack -> Maybe BMap -> Model 
+updateRec model expr ss bm = 
+  {model |
+    expression = expr |> Maybe.withDefault model.expression, 
+    stack      = ss   |> Maybe.withDefault model.stack, 
+    bmap       = bm   |> Maybe.withDefault model.bmap 
+  }
+-}
+
+updateE : String -> Model -> Model
+updateE e rec = { rec|expression = e }
+
+updateS : SStack -> Model -> Model
+updateS s rec = { rec|stack = s }
+
+
+validate: Model -> Bool
+validate model = 
   let 
-    res = validate s empty bmap 
+    {expression, stack, bmap} = model 
+  in     
+    case (pop expression) of 
+      Nothing -> 
+        isEmpty stack
+
+      Just (tok, restExpr) -> 
+        case (getClosr tok bmap) of 
+          Just (closer) -> 
+            model
+              |> updateE restExpr 
+              |> updateS (pushC closer stack) 
+              |> validate 
+          Nothing -> 
+            if (isClosr tok bmap) == True then
+              case (pop stack) of 
+                Just (ts, restOfStack) -> 
+                  if ts == tok  then
+                    model 
+                      |> updateE restExpr |> updateS restOfStack 
+                      |> validate 
+                  else 
+                    False 
+                Nothing ->
+                  False 
+            else
+                validate {model |expression = restExpr}
+
+
+      
+validateString: Model -> Bool 
+validateString model  = 
+  let 
+    res = validate model  
     _= Debug.watch "Result " (res, s)
   in 
     res
@@ -113,52 +173,89 @@ pushC c s =
 
 isOpenr: Char -> List BPair -> Bool 
 isOpenr o bmap = 
-  List.member o (List.map .opener bmap)
-
+  bmap 
+    |> List.filter .isEnabled
+    |> List.map .opener
+    |> List.member o
+ 
 
 isClosr: Char -> List BPair -> Bool 
 isClosr c bmap = 
-  List.member c (List.map .closer bmap)
+  bmap 
+    |> List.filter .isEnabled
+    |> List.map .closer
+    |> List.member c 
 
 
-matchOpenr: Char -> BPair -> Maybe Char
-matchOpenr o bp = 
-  if bp.opener == o then 
-    Just bp.closer 
+matchEnabledOpenr: Char -> BPair -> Maybe Char
+matchEnabledOpenr o bp = 
+  if bp.isEnabled then
+    if bp.opener == o then 
+        Just(bp.closer)
+    else 
+        Nothing 
   else 
-    Nothing 
+    Nothing
 
+-- Four variants of the Closure function 
 getClosr: Char -> List BPair -> Maybe Char 
-getClosr o bm =
+getClosr o bm =  
+  List.head (List.filterMap (matchEnabledOpenr o) bm )
+
+
+getClosr2 : Char -> List BPair -> Maybe Char 
+getClosr2 o bmap = 
+  let 
+    getPair {opener, closer, isEnabled} = 
+      case isEnabled of 
+        True -> 
+          (opener, closer)
+        False ->
+          ('\0', '\0')
+  in 
+    bmap 
+      --|> List.filter .isEnabled 
+      |> List.map getPair  
+      |> Dict.fromList 
+      |> Dict.get o
+  --  |> Maybe.withDefault '0'
+
+
+matchEnabledOpenrX : Char -> BPair -> Bool
+matchEnabledOpenrX o bp = 
+  bp.isEnabled && bp.opener == o 
+
+
+getClosr3 : Char -> List BPair -> Maybe Char 
+getClosr3 opener bmap = 
+  bmap 
+    |> Listx.find (matchEnabledOpenrX opener)
+    |> Maybe.map .closer 
+
   
-  List.head (List.filterMap (matchOpenr o) bm )
-
-
-validate: String -> SStack -> BMap -> Bool
-validate expr stacks bMap =
-  case (pop expr) of 
-    Nothing -> 
-      isEmpty stacks
-
-    Just (x, restExpr) -> 
-      case (getClosr x bMap) of 
-        Just (c) -> 
-          validate restExpr (pushC c stacks) bMap
-        Nothing -> 
-          case (isClosr x bMap) of 
-            True -> 
-              case (pop stacks) of 
-                Just (t, restOfStack) -> 
-                  if t == x  then 
-                    validate restExpr restOfStack bMap
-                  else 
-                    False 
-                Nothing ->
-                  False 
-            False ->
-              validate restExpr stacks bMap 
+getClosr4 : Char -> List BPair -> Maybe Char 
+getClosr4 o bmap = 
+  bmap 
+    |> List.filter (matchEnabledOpenrX o)
+    |> List.map .opener
+    |> List.head 
     
 
+
+-- VIEW 
+
+entryItem : Address Action -> BPair -> Html
+entryItem address entry =
+  li   
+    [ classList [ ("highlight", entry.isEnabled) ],
+      onClick address (Mark entry.id)
+    ]
+    [ span [][text "opener -   "], 
+      span [ class "opener" ] [ text (String.fromChar entry.opener) ],
+      span [ class "closer" ] [ text (String.fromChar entry.closer) ],
+      span [][text "   - closer"] 
+      -- button [ class "delete", onClick address (Delete entry.id) ] []
+    ]
       
 entryForm : Address Action -> Model -> Html
 entryForm address model =
@@ -177,17 +274,32 @@ entryForm address model =
       h2
         [ revStyle]
         [ text (model.expression ++ " is " ++ 
-          toString (validateString model.expression model.bmap )) ]
+          toString (validateString model )) ]
     ]
 
+entryList : Address Action -> List BPair -> Html
+entryList address entries =
+  let
+    entryItems = List.map (entryItem address) entries
+    items = entryItems -- ++ [ totalItem (totalPoints entries) ]
+  in
+    ul [ bracStyle] items
 
 view : Address Action -> Model -> Html
 view address model =
-  div [ id "container" ]
-    [ pageHeader,
-      entryForm address model,
-      pageFooter
-    ]
+  div [] [
+    div [ id "container" ]
+      [ pageHeader,
+        entryForm address model,
+        bracketHeader,
+        entryList address model.bmap
+      ],
+    div [] 
+      [
+        pageFooter
+      ]
+  ]
+
 
 
 initialModel : Model
@@ -195,9 +307,11 @@ initialModel =
   { expression = "", 
     bmap = 
       [
-        newPair '(' ')',
-        newPair '{' '}' 
-      ]
+        newPair '(' ')' True 1,
+        newPair '{' '}' True 2, 
+        newPair '<' '>' True 3
+      ], 
+    stack = empty 
   }
 
 
@@ -224,11 +338,14 @@ pageHeader : Html
 pageHeader =
   h1 [ ] [ title "Validator" 1 ]
 
+bracketHeader : Html
+bracketHeader =
+  h2 [ ] [ title "Bracket Map" 1 ]
 
 pageFooter : Html
 pageFooter =
-  footer [ ]
-    [ a [ href "http://hat.kgisl.com" ]
+  footer []
+    [ a [ href "http://edu.kgisl.com" ]
         [ text "KGISL CampSite" ]
     ]
 
@@ -253,4 +370,14 @@ revStyle =
     , ("text-align", "center")
     , ("color", "red")
     ]
-      
+
+bracStyle : Attribute
+bracStyle =
+  style
+    [ ("width", "100%")
+    , ("height", "40px")
+    , ("padding", "10px 0")
+    , ("font-size", "2")
+    , ("text-align", "center")
+    , ("color", "#f60")
+    ]
