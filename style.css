@@ -48,7 +48,7 @@ header {
 footer {
   color: #a6a6a6;
   margin: 50px auto 0;
-  font-size: 12px;
+  font-size: 18px;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
   text-align: center;
   line-height: 1em;
@@ -185,11 +185,16 @@ li .phrase {
   left: 80px;
 }
 
+.phrase { float:right }
+
 li .points {
   position: absolute;
   top: 18px;
   right: 80px;
 }
+
+.points { float:left }
+
 
 li .label {
   position: absolute;
