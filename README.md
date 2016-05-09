@@ -7,3 +7,4 @@ Simple validator
 
 ## Version 1.0 
 Simple validator with bracket pairs that can be dynamically disabled, enabled
+![Version 1](img/dynamicValidator.png)
