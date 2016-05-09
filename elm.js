@@ -8129,6 +8129,556 @@ Elm.Json.Decode.make = function (_elm) {
                                     ,value: value
                                     ,customDecoder: customDecoder};
 };
+Elm.Set = Elm.Set || {};
+Elm.Set.make = function (_elm) {
+   "use strict";
+   _elm.Set = _elm.Set || {};
+   if (_elm.Set.values) return _elm.Set.values;
+   var _U = Elm.Native.Utils.make(_elm),$Basics = Elm.Basics.make(_elm),$Dict = Elm.Dict.make(_elm),$List = Elm.List.make(_elm);
+   var _op = {};
+   var foldr = F3(function (f,b,_p0) {    var _p1 = _p0;return A3($Dict.foldr,F3(function (k,_p2,b) {    return A2(f,k,b);}),b,_p1._0);});
+   var foldl = F3(function (f,b,_p3) {    var _p4 = _p3;return A3($Dict.foldl,F3(function (k,_p5,b) {    return A2(f,k,b);}),b,_p4._0);});
+   var toList = function (_p6) {    var _p7 = _p6;return $Dict.keys(_p7._0);};
+   var size = function (_p8) {    var _p9 = _p8;return $Dict.size(_p9._0);};
+   var member = F2(function (k,_p10) {    var _p11 = _p10;return A2($Dict.member,k,_p11._0);});
+   var isEmpty = function (_p12) {    var _p13 = _p12;return $Dict.isEmpty(_p13._0);};
+   var Set_elm_builtin = function (a) {    return {ctor: "Set_elm_builtin",_0: a};};
+   var empty = Set_elm_builtin($Dict.empty);
+   var singleton = function (k) {    return Set_elm_builtin(A2($Dict.singleton,k,{ctor: "_Tuple0"}));};
+   var insert = F2(function (k,_p14) {    var _p15 = _p14;return Set_elm_builtin(A3($Dict.insert,k,{ctor: "_Tuple0"},_p15._0));});
+   var fromList = function (xs) {    return A3($List.foldl,insert,empty,xs);};
+   var map = F2(function (f,s) {    return fromList(A2($List.map,f,toList(s)));});
+   var remove = F2(function (k,_p16) {    var _p17 = _p16;return Set_elm_builtin(A2($Dict.remove,k,_p17._0));});
+   var union = F2(function (_p19,_p18) {    var _p20 = _p19;var _p21 = _p18;return Set_elm_builtin(A2($Dict.union,_p20._0,_p21._0));});
+   var intersect = F2(function (_p23,_p22) {    var _p24 = _p23;var _p25 = _p22;return Set_elm_builtin(A2($Dict.intersect,_p24._0,_p25._0));});
+   var diff = F2(function (_p27,_p26) {    var _p28 = _p27;var _p29 = _p26;return Set_elm_builtin(A2($Dict.diff,_p28._0,_p29._0));});
+   var filter = F2(function (p,_p30) {    var _p31 = _p30;return Set_elm_builtin(A2($Dict.filter,F2(function (k,_p32) {    return p(k);}),_p31._0));});
+   var partition = F2(function (p,_p33) {
+      var _p34 = _p33;
+      var _p35 = A2($Dict.partition,F2(function (k,_p36) {    return p(k);}),_p34._0);
+      var p1 = _p35._0;
+      var p2 = _p35._1;
+      return {ctor: "_Tuple2",_0: Set_elm_builtin(p1),_1: Set_elm_builtin(p2)};
+   });
+   return _elm.Set.values = {_op: _op
+                            ,empty: empty
+                            ,singleton: singleton
+                            ,insert: insert
+                            ,remove: remove
+                            ,isEmpty: isEmpty
+                            ,member: member
+                            ,size: size
+                            ,foldl: foldl
+                            ,foldr: foldr
+                            ,map: map
+                            ,filter: filter
+                            ,partition: partition
+                            ,union: union
+                            ,intersect: intersect
+                            ,diff: diff
+                            ,toList: toList
+                            ,fromList: fromList};
+};
+Elm.List = Elm.List || {};
+Elm.List.Extra = Elm.List.Extra || {};
+Elm.List.Extra.make = function (_elm) {
+   "use strict";
+   _elm.List = _elm.List || {};
+   _elm.List.Extra = _elm.List.Extra || {};
+   if (_elm.List.Extra.values) return _elm.List.Extra.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Set = Elm.Set.make(_elm),
+   $Signal = Elm.Signal.make(_elm);
+   var _op = {};
+   var zip5 = $List.map5(F5(function (v0,v1,v2,v3,v4) {    return {ctor: "_Tuple5",_0: v0,_1: v1,_2: v2,_3: v3,_4: v4};}));
+   var zip4 = $List.map4(F4(function (v0,v1,v2,v3) {    return {ctor: "_Tuple4",_0: v0,_1: v1,_2: v2,_3: v3};}));
+   var zip3 = $List.map3(F3(function (v0,v1,v2) {    return {ctor: "_Tuple3",_0: v0,_1: v1,_2: v2};}));
+   var zip = $List.map2(F2(function (v0,v1) {    return {ctor: "_Tuple2",_0: v0,_1: v1};}));
+   var isPrefixOf = function (prefix) {
+      return function (_p0) {
+         return A2($List.all,$Basics.identity,A3($List.map2,F2(function (x,y) {    return _U.eq(x,y);}),prefix,_p0));
+      };
+   };
+   var isSuffixOf = F2(function (suffix,xs) {    return A2(isPrefixOf,$List.reverse(suffix),$List.reverse(xs));});
+   var selectSplit = function (xs) {
+      var _p1 = xs;
+      if (_p1.ctor === "[]") {
+            return _U.list([]);
+         } else {
+            var _p5 = _p1._1;
+            var _p4 = _p1._0;
+            return A2($List._op["::"],
+            {ctor: "_Tuple3",_0: _U.list([]),_1: _p4,_2: _p5},
+            A2($List.map,
+            function (_p2) {
+               var _p3 = _p2;
+               return {ctor: "_Tuple3",_0: A2($List._op["::"],_p4,_p3._0),_1: _p3._1,_2: _p3._2};
+            },
+            selectSplit(_p5)));
+         }
+   };
+   var select = function (xs) {
+      var _p6 = xs;
+      if (_p6.ctor === "[]") {
+            return _U.list([]);
+         } else {
+            var _p10 = _p6._1;
+            var _p9 = _p6._0;
+            return A2($List._op["::"],
+            {ctor: "_Tuple2",_0: _p9,_1: _p10},
+            A2($List.map,function (_p7) {    var _p8 = _p7;return {ctor: "_Tuple2",_0: _p8._0,_1: A2($List._op["::"],_p9,_p8._1)};},select(_p10)));
+         }
+   };
+   var tailsHelp = F2(function (e,list) {
+      var _p11 = list;
+      if (_p11.ctor === "::") {
+            var _p12 = _p11._0;
+            return A2($List._op["::"],A2($List._op["::"],e,_p12),A2($List._op["::"],_p12,_p11._1));
+         } else {
+            return _U.list([]);
+         }
+   });
+   var tails = A2($List.foldr,tailsHelp,_U.list([_U.list([])]));
+   var isInfixOf = F2(function (infix,xs) {    return A2($List.any,isPrefixOf(infix),tails(xs));});
+   var inits = A2($List.foldr,
+   F2(function (e,acc) {    return A2($List._op["::"],_U.list([]),A2($List.map,F2(function (x,y) {    return A2($List._op["::"],x,y);})(e),acc));}),
+   _U.list([_U.list([])]));
+   var groupByTransitive = F2(function (cmp,xs$) {
+      var _p13 = xs$;
+      if (_p13.ctor === "[]") {
+            return _U.list([]);
+         } else {
+            if (_p13._1.ctor === "[]") {
+                  return _U.list([_U.list([_p13._0])]);
+               } else {
+                  var _p15 = _p13._0;
+                  var _p14 = A2(groupByTransitive,cmp,_p13._1);
+                  if (_p14.ctor === "::") {
+                        return A2(cmp,_p15,_p13._1._0) ? A2($List._op["::"],A2($List._op["::"],_p15,_p14._0),_p14._1) : A2($List._op["::"],
+                        _U.list([_p15]),
+                        _p14);
+                     } else {
+                        return _U.list([]);
+                     }
+               }
+         }
+   });
+   var stripPrefix = F2(function (prefix,xs) {
+      var step = F2(function (e,m) {
+         var _p16 = m;
+         if (_p16.ctor === "Nothing") {
+               return $Maybe.Nothing;
+            } else {
+               if (_p16._0.ctor === "[]") {
+                     return $Maybe.Nothing;
+                  } else {
+                     return _U.eq(e,_p16._0._0) ? $Maybe.Just(_p16._0._1) : $Maybe.Nothing;
+                  }
+            }
+      });
+      return A3($List.foldl,step,$Maybe.Just(xs),prefix);
+   });
+   var dropWhileEnd = function (p) {
+      return A2($List.foldr,F2(function (x,xs) {    return p(x) && $List.isEmpty(xs) ? _U.list([]) : A2($List._op["::"],x,xs);}),_U.list([]));
+   };
+   var takeWhileEnd = function (p) {
+      var step = F2(function (x,_p17) {
+         var _p18 = _p17;
+         var _p19 = _p18._0;
+         return p(x) && _p18._1 ? {ctor: "_Tuple2",_0: A2($List._op["::"],x,_p19),_1: true} : {ctor: "_Tuple2",_0: _p19,_1: false};
+      });
+      return function (_p20) {
+         return $Basics.fst(A3($List.foldr,step,{ctor: "_Tuple2",_0: _U.list([]),_1: true},_p20));
+      };
+   };
+   var splitAt = F2(function (n,xs) {    return {ctor: "_Tuple2",_0: A2($List.take,n,xs),_1: A2($List.drop,n,xs)};});
+   var unfoldr = F2(function (f,seed) {
+      var _p21 = f(seed);
+      if (_p21.ctor === "Nothing") {
+            return _U.list([]);
+         } else {
+            return A2($List._op["::"],_p21._0._0,A2(unfoldr,f,_p21._0._1));
+         }
+   });
+   var scanr1 = F2(function (f,xs$) {
+      var _p22 = xs$;
+      if (_p22.ctor === "[]") {
+            return _U.list([]);
+         } else {
+            if (_p22._1.ctor === "[]") {
+                  return _U.list([_p22._0]);
+               } else {
+                  var _p23 = A2(scanr1,f,_p22._1);
+                  if (_p23.ctor === "::") {
+                        return A2($List._op["::"],A2(f,_p22._0,_p23._0),_p23);
+                     } else {
+                        return _U.list([]);
+                     }
+               }
+         }
+   });
+   var scanr = F3(function (f,acc,xs$) {
+      var _p24 = xs$;
+      if (_p24.ctor === "[]") {
+            return _U.list([acc]);
+         } else {
+            var _p25 = A3(scanr,f,acc,_p24._1);
+            if (_p25.ctor === "::") {
+                  return A2($List._op["::"],A2(f,_p24._0,_p25._0),_p25);
+               } else {
+                  return _U.list([]);
+               }
+         }
+   });
+   var scanl1 = F2(function (f,xs$) {
+      var _p26 = xs$;
+      if (_p26.ctor === "[]") {
+            return _U.list([]);
+         } else {
+            return A3($List.scanl,f,_p26._0,_p26._1);
+         }
+   });
+   var foldr1 = F2(function (f,xs) {
+      var mf = F2(function (x,m) {
+         return $Maybe.Just(function () {    var _p27 = m;if (_p27.ctor === "Nothing") {    return x;} else {    return A2(f,x,_p27._0);}}());
+      });
+      return A3($List.foldr,mf,$Maybe.Nothing,xs);
+   });
+   var foldl1 = F2(function (f,xs) {
+      var mf = F2(function (x,m) {
+         return $Maybe.Just(function () {    var _p28 = m;if (_p28.ctor === "Nothing") {    return x;} else {    return A2(f,_p28._0,x);}}());
+      });
+      return A3($List.foldl,mf,$Maybe.Nothing,xs);
+   });
+   var uniqueHelp = F2(function (existing,remaining) {
+      uniqueHelp: while (true) {
+         var _p29 = remaining;
+         if (_p29.ctor === "[]") {
+               return _U.list([]);
+            } else {
+               var _p31 = _p29._1;
+               var _p30 = _p29._0;
+               if (A2($Set.member,_p30,existing)) {
+                     var _v18 = existing,_v19 = _p31;
+                     existing = _v18;
+                     remaining = _v19;
+                     continue uniqueHelp;
+                  } else return A2($List._op["::"],_p30,A2(uniqueHelp,A2($Set.insert,_p30,existing),_p31));
+            }
+      }
+   });
+   var unique = function (list) {    return A2(uniqueHelp,$Set.empty,list);};
+   var interweaveHelp = F3(function (l1,l2,acc) {
+      interweaveHelp: while (true) {
+         var _p32 = {ctor: "_Tuple2",_0: l1,_1: l2};
+         _v20_1: do {
+            if (_p32._0.ctor === "::") {
+                  if (_p32._1.ctor === "::") {
+                        var _v21 = _p32._0._1,_v22 = _p32._1._1,_v23 = A2($Basics._op["++"],acc,_U.list([_p32._0._0,_p32._1._0]));
+                        l1 = _v21;
+                        l2 = _v22;
+                        acc = _v23;
+                        continue interweaveHelp;
+                     } else {
+                        break _v20_1;
+                     }
+               } else {
+                  if (_p32._1.ctor === "[]") {
+                        break _v20_1;
+                     } else {
+                        return A2($Basics._op["++"],acc,_p32._1);
+                     }
+               }
+         } while (false);
+         return A2($Basics._op["++"],acc,_p32._0);
+      }
+   });
+   var interweave = F2(function (l1,l2) {    return A3(interweaveHelp,l1,l2,_U.list([]));});
+   var permutations = function (xs$) {
+      var _p33 = xs$;
+      if (_p33.ctor === "[]") {
+            return _U.list([_U.list([])]);
+         } else {
+            var f = function (_p34) {
+               var _p35 = _p34;
+               return A2($List.map,F2(function (x,y) {    return A2($List._op["::"],x,y);})(_p35._0),permutations(_p35._1));
+            };
+            return A2($List.concatMap,f,select(_p33));
+         }
+   };
+   var isPermutationOf = F2(function (permut,xs) {    return A2($List.member,permut,permutations(xs));});
+   var subsequencesNonEmpty = function (xs) {
+      var _p36 = xs;
+      if (_p36.ctor === "[]") {
+            return _U.list([]);
+         } else {
+            var _p37 = _p36._0;
+            var f = F2(function (ys,r) {    return A2($List._op["::"],ys,A2($List._op["::"],A2($List._op["::"],_p37,ys),r));});
+            return A2($List._op["::"],_U.list([_p37]),A3($List.foldr,f,_U.list([]),subsequencesNonEmpty(_p36._1)));
+         }
+   };
+   var subsequences = function (xs) {    return A2($List._op["::"],_U.list([]),subsequencesNonEmpty(xs));};
+   var isSubsequenceOf = F2(function (subseq,xs) {    return A2($List.member,subseq,subsequences(xs));});
+   var transpose = function (ll) {
+      transpose: while (true) {
+         var _p38 = ll;
+         if (_p38.ctor === "[]") {
+               return _U.list([]);
+            } else {
+               if (_p38._0.ctor === "[]") {
+                     var _v28 = _p38._1;
+                     ll = _v28;
+                     continue transpose;
+                  } else {
+                     var _p39 = _p38._1;
+                     var tails = A2($List.filterMap,$List.tail,_p39);
+                     var heads = A2($List.filterMap,$List.head,_p39);
+                     return A2($List._op["::"],A2($List._op["::"],_p38._0._0,heads),transpose(A2($List._op["::"],_p38._0._1,tails)));
+                  }
+            }
+      }
+   };
+   var intercalate = function (xs) {    return function (_p40) {    return $List.concat(A2($List.intersperse,xs,_p40));};};
+   var removeWhen = F2(function (pred,list) {    return A2($List.filter,function (_p41) {    return $Basics.not(pred(_p41));},list);});
+   var singleton = function (x) {    return _U.list([x]);};
+   var replaceIf = F3(function (predicate,replacement,list) {
+      return A2($List.map,function (item) {    return predicate(item) ? replacement : item;},list);
+   });
+   var findIndices = function (p) {
+      return function (_p42) {
+         return A2($List.map,
+         $Basics.fst,
+         A2($List.filter,
+         function (_p43) {
+            var _p44 = _p43;
+            return p(_p44._1);
+         },
+         A2($List.indexedMap,F2(function (v0,v1) {    return {ctor: "_Tuple2",_0: v0,_1: v1};}),_p42)));
+      };
+   };
+   var findIndex = function (p) {    return function (_p45) {    return $List.head(A2(findIndices,p,_p45));};};
+   var elemIndices = function (x) {    return findIndices(F2(function (x,y) {    return _U.eq(x,y);})(x));};
+   var elemIndex = function (x) {    return findIndex(F2(function (x,y) {    return _U.eq(x,y);})(x));};
+   var find = F2(function (predicate,list) {
+      find: while (true) {
+         var _p46 = list;
+         if (_p46.ctor === "[]") {
+               return $Maybe.Nothing;
+            } else {
+               var _p47 = _p46._0;
+               if (predicate(_p47)) return $Maybe.Just(_p47); else {
+                     var _v31 = predicate,_v32 = _p46._1;
+                     predicate = _v31;
+                     list = _v32;
+                     continue find;
+                  }
+            }
+      }
+   });
+   var notMember = function (x) {    return function (_p48) {    return $Basics.not(A2($List.member,x,_p48));};};
+   var andThen = $Basics.flip($List.concatMap);
+   var lift2 = F3(function (f,la,lb) {    return A2(andThen,la,function (a) {    return A2(andThen,lb,function (b) {    return _U.list([A2(f,a,b)]);});});});
+   var lift3 = F4(function (f,la,lb,lc) {
+      return A2(andThen,
+      la,
+      function (a) {
+         return A2(andThen,lb,function (b) {    return A2(andThen,lc,function (c) {    return _U.list([A3(f,a,b,c)]);});});
+      });
+   });
+   var lift4 = F5(function (f,la,lb,lc,ld) {
+      return A2(andThen,
+      la,
+      function (a) {
+         return A2(andThen,
+         lb,
+         function (b) {
+            return A2(andThen,lc,function (c) {    return A2(andThen,ld,function (d) {    return _U.list([A4(f,a,b,c,d)]);});});
+         });
+      });
+   });
+   var andMap = F2(function (fl,l) {    return A3($List.map2,F2(function (x,y) {    return x(y);}),fl,l);});
+   var dropDuplicates = function (list) {
+      var step = F2(function (next,_p49) {
+         var _p50 = _p49;
+         var _p52 = _p50._0;
+         var _p51 = _p50._1;
+         return A2($Set.member,next,_p52) ? {ctor: "_Tuple2",_0: _p52,_1: _p51} : {ctor: "_Tuple2"
+                                                                                  ,_0: A2($Set.insert,next,_p52)
+                                                                                  ,_1: A2($List._op["::"],next,_p51)};
+      });
+      return $List.reverse($Basics.snd(A3($List.foldl,step,{ctor: "_Tuple2",_0: $Set.empty,_1: _U.list([])},list)));
+   };
+   var dropWhile = F2(function (predicate,list) {
+      dropWhile: while (true) {
+         var _p53 = list;
+         if (_p53.ctor === "[]") {
+               return _U.list([]);
+            } else {
+               if (predicate(_p53._0)) {
+                     var _v35 = predicate,_v36 = _p53._1;
+                     predicate = _v35;
+                     list = _v36;
+                     continue dropWhile;
+                  } else return list;
+            }
+      }
+   });
+   var takeWhile = F2(function (predicate,list) {
+      var _p54 = list;
+      if (_p54.ctor === "[]") {
+            return _U.list([]);
+         } else {
+            var _p55 = _p54._0;
+            return predicate(_p55) ? A2($List._op["::"],_p55,A2(takeWhile,predicate,_p54._1)) : _U.list([]);
+         }
+   });
+   var span = F2(function (p,xs) {    return {ctor: "_Tuple2",_0: A2(takeWhile,p,xs),_1: A2(dropWhile,p,xs)};});
+   var $break = function (p) {    return span(function (_p56) {    return $Basics.not(p(_p56));});};
+   var groupBy = F2(function (eq,xs$) {
+      var _p57 = xs$;
+      if (_p57.ctor === "[]") {
+            return _U.list([]);
+         } else {
+            var _p59 = _p57._0;
+            var _p58 = A2(span,eq(_p59),_p57._1);
+            var ys = _p58._0;
+            var zs = _p58._1;
+            return A2($List._op["::"],A2($List._op["::"],_p59,ys),A2(groupBy,eq,zs));
+         }
+   });
+   var group = groupBy(F2(function (x,y) {    return _U.eq(x,y);}));
+   var minimumBy = F2(function (f,ls) {
+      var minBy = F2(function (x,_p60) {
+         var _p61 = _p60;
+         var _p62 = _p61._1;
+         var fx = f(x);
+         return _U.cmp(fx,_p62) < 0 ? {ctor: "_Tuple2",_0: x,_1: fx} : {ctor: "_Tuple2",_0: _p61._0,_1: _p62};
+      });
+      var _p63 = ls;
+      if (_p63.ctor === "::") {
+            if (_p63._1.ctor === "[]") {
+                  return $Maybe.Just(_p63._0);
+               } else {
+                  var _p64 = _p63._0;
+                  return $Maybe.Just($Basics.fst(A3($List.foldl,minBy,{ctor: "_Tuple2",_0: _p64,_1: f(_p64)},_p63._1)));
+               }
+         } else {
+            return $Maybe.Nothing;
+         }
+   });
+   var maximumBy = F2(function (f,ls) {
+      var maxBy = F2(function (x,_p65) {
+         var _p66 = _p65;
+         var _p67 = _p66._1;
+         var fx = f(x);
+         return _U.cmp(fx,_p67) > 0 ? {ctor: "_Tuple2",_0: x,_1: fx} : {ctor: "_Tuple2",_0: _p66._0,_1: _p67};
+      });
+      var _p68 = ls;
+      if (_p68.ctor === "::") {
+            if (_p68._1.ctor === "[]") {
+                  return $Maybe.Just(_p68._0);
+               } else {
+                  var _p69 = _p68._0;
+                  return $Maybe.Just($Basics.fst(A3($List.foldl,maxBy,{ctor: "_Tuple2",_0: _p69,_1: f(_p69)},_p68._1)));
+               }
+         } else {
+            return $Maybe.Nothing;
+         }
+   });
+   var uncons = function (xs) {
+      var _p70 = xs;
+      if (_p70.ctor === "[]") {
+            return $Maybe.Nothing;
+         } else {
+            return $Maybe.Just({ctor: "_Tuple2",_0: _p70._0,_1: _p70._1});
+         }
+   };
+   var iterate = F2(function (f,x) {
+      var _p71 = f(x);
+      if (_p71.ctor === "Just") {
+            return A2($List._op["::"],x,A2(iterate,f,_p71._0));
+         } else {
+            return _U.list([x]);
+         }
+   });
+   var getAt = F2(function (xs,idx) {    return $List.head(A2($List.drop,idx,xs));});
+   _op["!!"] = getAt;
+   var init = function () {
+      var maybe = F2(function (d,f) {    return function (_p72) {    return A2($Maybe.withDefault,d,A2($Maybe.map,f,_p72));};});
+      return A2($List.foldr,
+      function (_p73) {
+         return A2(F2(function (x,y) {    return function (_p74) {    return x(y(_p74));};}),
+         $Maybe.Just,
+         A2(maybe,_U.list([]),F2(function (x,y) {    return A2($List._op["::"],x,y);})(_p73)));
+      },
+      $Maybe.Nothing);
+   }();
+   var last = foldl1($Basics.flip($Basics.always));
+   return _elm.List.Extra.values = {_op: _op
+                                   ,last: last
+                                   ,init: init
+                                   ,getAt: getAt
+                                   ,uncons: uncons
+                                   ,minimumBy: minimumBy
+                                   ,maximumBy: maximumBy
+                                   ,andMap: andMap
+                                   ,andThen: andThen
+                                   ,takeWhile: takeWhile
+                                   ,dropWhile: dropWhile
+                                   ,dropDuplicates: dropDuplicates
+                                   ,replaceIf: replaceIf
+                                   ,singleton: singleton
+                                   ,removeWhen: removeWhen
+                                   ,iterate: iterate
+                                   ,intercalate: intercalate
+                                   ,transpose: transpose
+                                   ,subsequences: subsequences
+                                   ,permutations: permutations
+                                   ,interweave: interweave
+                                   ,unique: unique
+                                   ,foldl1: foldl1
+                                   ,foldr1: foldr1
+                                   ,scanl1: scanl1
+                                   ,scanr: scanr
+                                   ,scanr1: scanr1
+                                   ,unfoldr: unfoldr
+                                   ,splitAt: splitAt
+                                   ,takeWhileEnd: takeWhileEnd
+                                   ,dropWhileEnd: dropWhileEnd
+                                   ,span: span
+                                   ,$break: $break
+                                   ,stripPrefix: stripPrefix
+                                   ,group: group
+                                   ,groupBy: groupBy
+                                   ,groupByTransitive: groupByTransitive
+                                   ,inits: inits
+                                   ,tails: tails
+                                   ,select: select
+                                   ,selectSplit: selectSplit
+                                   ,isPrefixOf: isPrefixOf
+                                   ,isSuffixOf: isSuffixOf
+                                   ,isInfixOf: isInfixOf
+                                   ,isSubsequenceOf: isSubsequenceOf
+                                   ,isPermutationOf: isPermutationOf
+                                   ,notMember: notMember
+                                   ,find: find
+                                   ,elemIndex: elemIndex
+                                   ,elemIndices: elemIndices
+                                   ,findIndex: findIndex
+                                   ,findIndices: findIndices
+                                   ,zip: zip
+                                   ,zip3: zip3
+                                   ,zip4: zip4
+                                   ,zip5: zip5
+                                   ,lift2: lift2
+                                   ,lift3: lift3
+                                   ,lift4: lift4};
+};
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 
 },{}],2:[function(require,module,exports){
@@ -10327,16 +10877,24 @@ Elm.Bracket.make = function (_elm) {
    var _U = Elm.Native.Utils.make(_elm),
    $Basics = Elm.Basics.make(_elm),
    $Debug = Elm.Debug.make(_elm),
+   $Dict = Elm.Dict.make(_elm),
    $Html = Elm.Html.make(_elm),
    $Html$Attributes = Elm.Html.Attributes.make(_elm),
    $Html$Events = Elm.Html.Events.make(_elm),
    $List = Elm.List.make(_elm),
+   $List$Extra = Elm.List.Extra.make(_elm),
    $Maybe = Elm.Maybe.make(_elm),
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm),
    $StartApp$Simple = Elm.StartApp.Simple.make(_elm),
    $String = Elm.String.make(_elm);
    var _op = {};
+   var bracStyle = $Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "width",_1: "100%"}
+                                                  ,{ctor: "_Tuple2",_0: "height",_1: "40px"}
+                                                  ,{ctor: "_Tuple2",_0: "padding",_1: "10px 0"}
+                                                  ,{ctor: "_Tuple2",_0: "font-size",_1: "2"}
+                                                  ,{ctor: "_Tuple2",_0: "text-align",_1: "center"}
+                                                  ,{ctor: "_Tuple2",_0: "color",_1: "#f60"}]));
    var revStyle = $Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "width",_1: "100%"}
                                                  ,{ctor: "_Tuple2",_0: "height",_1: "40px"}
                                                  ,{ctor: "_Tuple2",_0: "padding",_1: "10px 0"}
@@ -10350,133 +10908,24 @@ Elm.Bracket.make = function (_elm) {
                                                  ,{ctor: "_Tuple2",_0: "text-align",_1: "center"}]));
    var pageFooter = A2($Html.footer,
    _U.list([]),
-   _U.list([A2($Html.a,_U.list([$Html$Attributes.href("http://hat.kgisl.com")]),_U.list([$Html.text("KGISL CampSite")]))]));
+   _U.list([A2($Html.a,_U.list([$Html$Attributes.href("http://edu.kgisl.com")]),_U.list([$Html.text("KGISL CampSite")]))]));
    var title = F2(function (message,times) {
       return $Html.text($String.trimRight(A2($String.repeat,times,$String.toUpper(A2($Basics._op["++"],message," ")))));
    });
    var pageHeader = A2($Html.h1,_U.list([]),_U.list([A2(title,"Validator",1)]));
-   var matchOpenr = F2(function (o,bp) {    return _U.eq(bp.opener,o) ? $Maybe.Just(bp.closer) : $Maybe.Nothing;});
-   var getClosr = F2(function (o,bm) {    return $List.head(A2($List.filterMap,matchOpenr(o),bm));});
-   var isClosr = F2(function (c,bmap) {    return A2($List.member,c,A2($List.map,function (_) {    return _.closer;},bmap));});
-   var isOpenr = F2(function (o,bmap) {    return A2($List.member,o,A2($List.map,function (_) {    return _.opener;},bmap));});
-   var isEmpty = function (s) {    return $String.isEmpty(s) ? true : false;};
-   var peek = function (stack) {    return A3($String.slice,0,1,stack);};
-   var pop = function (stacks) {    return $String.uncons(stacks);};
-   var push = F2(function (tok,stacks) {    return A2($Basics._op["++"],tok,stacks);});
-   var pushC = F2(function (c,s) {    return A2(push,$String.fromChar(c),s);});
-   var validate = F3(function (expr,stacks,bMap) {
-      validate: while (true) {
-         var _p0 = pop(expr);
-         if (_p0.ctor === "Nothing") {
-               return isEmpty(stacks);
+   var bracketHeader = A2($Html.h2,_U.list([]),_U.list([A2(title,"Bracket Map",1)]));
+   var matchEnabledOpenrX = F2(function (o,bp) {    return bp.isEnabled && _U.eq(bp.opener,o);});
+   var getClosr3 = F2(function (opener,bmap) {
+      return A2($Maybe.map,function (_) {    return _.closer;},A2($List$Extra.find,matchEnabledOpenrX(opener),bmap));
+   });
+   var getClosr4 = F2(function (o,bmap) {
+      return $List.head(A2($List.map,function (_) {    return _.opener;},A2($List.filter,matchEnabledOpenrX(o),bmap)));
+   });
+   var getClosr2 = F2(function (o,bmap) {
+      var getPair = function (_p0) {
+         var _p1 = _p0;
+         var _p2 = _p1.isEnabled;
+         if (_p2 === true) {
+               return {ctor: "_Tuple2",_0: _p1.opener,_1: _p1.closer};
             } else {
-               var _p5 = _p0._0._0;
-               var _p4 = _p0._0._1;
-               var _p1 = A2(getClosr,_p5,bMap);
-               if (_p1.ctor === "Just") {
-                     var _v2 = _p4,_v3 = A2(pushC,_p1._0,stacks),_v4 = bMap;
-                     expr = _v2;
-                     stacks = _v3;
-                     bMap = _v4;
-                     continue validate;
-                  } else {
-                     var _p2 = A2(isClosr,_p5,bMap);
-                     if (_p2 === true) {
-                           var _p3 = pop(stacks);
-                           if (_p3.ctor === "Just") {
-                                 if (_U.eq(_p3._0._0,_p5)) {
-                                       var _v7 = _p4,_v8 = _p3._0._1,_v9 = bMap;
-                                       expr = _v7;
-                                       stacks = _v8;
-                                       bMap = _v9;
-                                       continue validate;
-                                    } else return false;
-                              } else {
-                                 return false;
-                              }
-                        } else {
-                           var _v10 = _p4,_v11 = stacks,_v12 = bMap;
-                           expr = _v10;
-                           stacks = _v11;
-                           bMap = _v12;
-                           continue validate;
-                        }
-                  }
-            }
-      }
-   });
-   var empty = "";
-   var validateString = F2(function (s,bmap) {
-      var res = A3(validate,s,empty,bmap);
-      var _p6 = A2($Debug.watch,"Result ",{ctor: "_Tuple2",_0: res,_1: s});
-      return res;
-   });
-   var update = F2(function (action,model) {
-      var _p7 = action;
-      if (_p7.ctor === "NoOp") {
-            return model;
-         } else {
-            return _U.update(model,{expression: _p7._0});
-         }
-   });
-   var UpdateExpression = function (a) {    return {ctor: "UpdateExpression",_0: a};};
-   var NoOp = {ctor: "NoOp"};
-   var newPair = F2(function (op,cl) {    return {opener: op,closer: cl,isEnabled: true,id: 0};});
-   var initialModel = {expression: "",bmap: _U.list([A2(newPair,_U.chr("("),_U.chr(")")),A2(newPair,_U.chr("{"),_U.chr("}"))])};
-   var Model = F2(function (a,b) {    return {expression: a,bmap: b};});
-   var BPair = F4(function (a,b,c,d) {    return {opener: a,closer: b,isEnabled: c,id: d};});
-   var onInput = F2(function (address,f) {
-      return A3($Html$Events.on,"input",$Html$Events.targetValue,function (v) {    return A2($Signal.message,address,f(v));});
-   });
-   var entryForm = F2(function (address,model) {
-      return A2($Html.div,
-      _U.list([]),
-      _U.list([A2($Html.input,
-              _U.list([$Html$Attributes.type$("text")
-                      ,$Html$Attributes.placeholder("{( () )}")
-                      ,$Html$Attributes.value(model.expression)
-                      ,$Html$Attributes.name("phrase")
-                      ,$Html$Attributes.autofocus(true)
-                      ,A2(onInput,address,UpdateExpression)
-                      ,strStyle]),
-              _U.list([]))
-              ,A2($Html.h2,
-              _U.list([revStyle]),
-              _U.list([$Html.text(A2($Basics._op["++"],
-              model.expression,
-              A2($Basics._op["++"]," is ",$Basics.toString(A2(validateString,model.expression,model.bmap)))))]))]));
-   });
-   var view = F2(function (address,model) {
-      return A2($Html.div,_U.list([$Html$Attributes.id("container")]),_U.list([pageHeader,A2(entryForm,address,model),pageFooter]));
-   });
-   var main = $StartApp$Simple.start({model: initialModel,view: view,update: update});
-   return _elm.Bracket.values = {_op: _op
-                                ,onInput: onInput
-                                ,BPair: BPair
-                                ,Model: Model
-                                ,newPair: newPair
-                                ,NoOp: NoOp
-                                ,UpdateExpression: UpdateExpression
-                                ,update: update
-                                ,validateString: validateString
-                                ,empty: empty
-                                ,push: push
-                                ,pop: pop
-                                ,peek: peek
-                                ,isEmpty: isEmpty
-                                ,pushC: pushC
-                                ,isOpenr: isOpenr
-                                ,isClosr: isClosr
-                                ,matchOpenr: matchOpenr
-                                ,getClosr: getClosr
-                                ,validate: validate
-                                ,entryForm: entryForm
-                                ,view: view
-                                ,initialModel: initialModel
-                                ,main: main
-                                ,title: title
-                                ,pageHeader: pageHeader
-                                ,pageFooter: pageFooter
-                                ,strStyle: strStyle
-                                ,revStyle: revStyle};
-};
+               return {ctor: "_Tuple2",_0: _U.chr("
