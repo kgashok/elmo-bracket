@@ -250,10 +250,10 @@ entryItem address entry =
     [ classList [ ("highlight", entry.isEnabled) ],
       onClick address (Mark entry.id)
     ]
-    [ span [][text "opener -   "], 
-      span [ class "opener" ] [ text (String.fromChar entry.opener) ],
-      span [ class "closer" ] [ text (String.fromChar entry.closer) ],
-      span [][text "   - closer"] 
+    [ -- span [][text "opener -   "], 
+      span [ class "phrase" ] [ text (String.fromChar entry.opener) ],
+      span [ class "points" ] [ text (String.fromChar entry.closer) ]
+      -- span [][text "   - closer"] 
       -- button [ class "delete", onClick address (Delete entry.id) ] []
     ]
       
@@ -283,23 +283,20 @@ entryList address entries =
     entryItems = List.map (entryItem address) entries
     items = entryItems -- ++ [ totalItem (totalPoints entries) ]
   in
-    ul [ bracStyle] items
+    --ul [ bracStyle] items
+     ul [ ] items
 
 view : Address Action -> Model -> Html
 view address model =
-  div [] [
-    div [ id "container" ]
-      [ pageHeader,
-        entryForm address model,
-        bracketHeader,
-        entryList address model.bmap
-      ],
-    div [] 
-      [
-        pageFooter
-      ]
-  ]
-
+  
+  div 
+    [ id "container" ]
+    [ pageHeader,
+      entryForm address model,
+      bracketHeader,
+      entryList address model.bmap,
+      pageFooter
+    ]
 
 
 initialModel : Model
@@ -344,10 +341,9 @@ bracketHeader =
 
 pageFooter : Html
 pageFooter =
-  footer []
-    [ a [ href "http://edu.kgisl.com" ]
-        [ text "KGISL CampSite" ]
-    ]
+  footer
+    [ ]
+    [ a [ href "http://edu.kgisl.com" ] [ text "The Campus Inside" ] ]
 
 
 strStyle : Attribute
