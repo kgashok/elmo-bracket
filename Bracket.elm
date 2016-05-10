@@ -32,7 +32,8 @@ type alias Model =
   {
     expression: String, 
     stack: SStack,
-    bmap: BMap
+    bmap: BMap,
+    isValid: Bool
   }
 
 -- Constructor function for creating new pairs 
@@ -53,7 +54,6 @@ type Action
   | Mark Int
 
 
-
 update : Action -> Model -> Model
 update action model =
   case action of
@@ -69,25 +69,8 @@ update action model =
         in
           { model | bmap = List.map updateEntry model.bmap }
 
+
 ---- Validator Related 
-
-{-
-updateRec : Model -> String -> Maybe SStack -> Model 
-updateRec r fields = 
-  case fields of 
-    [a] -> { r | expression = a }
-    [a,b] -> { r | expression = a, stack = b }
-    [a,b,c] -> { r | expression = a, stack = b, bmap = c }
-    _ -> r
-
-updateRec : Model -> Maybe String -> Maybe SStack -> Maybe BMap -> Model 
-updateRec model expr ss bm = 
-  {model |
-    expression = expr |> Maybe.withDefault model.expression, 
-    stack      = ss   |> Maybe.withDefault model.stack, 
-    bmap       = bm   |> Maybe.withDefault model.bmap 
-  }
--}
 
 updateE : String -> Model -> Model
 updateE e rec = { rec|expression = e }
@@ -96,21 +79,20 @@ updateS : SStack -> Model -> Model
 updateS s rec = { rec|stack = s }
 
 
-validate: Model -> Bool
+validate: Model -> Model 
 validate model = 
   let 
     {expression, stack, bmap} = model 
-  in     
+  in 
     case (pop expression) of 
       Nothing -> 
-        isEmpty stack
+        {model| isValid = isEmpty stack }
 
       Just (tok, restExpr) -> 
         case (getClosr tok bmap) of 
           Just (closer) -> 
             model
-              |> updateE restExpr 
-              |> updateS (pushC closer stack) 
+              |> updateE restExpr |> updateS (pushC closer stack) 
               |> validate 
           Nothing -> 
             if (isClosr tok bmap) == True then
@@ -119,21 +101,21 @@ validate model =
                   if ts == tok  then
                     model 
                       |> updateE restExpr |> updateS restOfStack 
-                      |> validate 
+                      |> validate
                   else 
-                    False 
+                    { model| isValid = False} 
                 Nothing ->
-                  False 
+                  { model| isValid = False} 
             else
                 validate {model |expression = restExpr}
 
 
       
-validateString: Model -> Bool 
+validateString: Model -> Model
 validateString model  = 
   let 
     res = validate model  
-    _= Debug.watch "Result " (res, s)
+    _= Debug.watch "Result " (res.isValid, res.stack, res.expression)
   in 
     res
 
@@ -214,11 +196,9 @@ getClosr2 o bmap =
           ('\0', '\0')
   in 
     bmap 
-      --|> List.filter .isEnabled 
       |> List.map getPair  
       |> Dict.fromList 
       |> Dict.get o
-  --  |> Maybe.withDefault '0'
 
 
 matchEnabledOpenrX : Char -> BPair -> Bool
@@ -244,6 +224,20 @@ getClosr4 o bmap =
 
 -- VIEW 
 
+stackItem : (Int, Char) -> Html 
+stackItem (index, token) = 
+  li []
+    --[ classList [ ("highlight", entry.isEnabled) ],
+    --  onClick address (Mark entry.id)
+    --]
+    [ -- span [][text "opener -   "], 
+      span [ class "index" ] [ text (toString index) ],
+      span [ class "token" ] [ text (String.fromChar token) ]
+      -- span [][text "   - closer"] 
+      -- button [ class "delete", onClick address (Delete entry.id) ] []
+    ]
+
+
 entryItem : Address Action -> BPair -> Html
 entryItem address entry =
   li   
@@ -259,29 +253,64 @@ entryItem address entry =
       
 entryForm : Address Action -> Model -> Html
 entryForm address model =
-  div [ ]
-    [ input
-        [ type' "text",
-          placeholder "{( () )}",
-          value model.expression,
-          name "phrase",
-          autofocus True,
-          onInput address UpdateExpression,
-          strStyle
-        ]
-        [ ],
-      --button [ class "change" ] [ text "Change" ],
-      h2
-        [ revStyle]
-        [ text (model.expression ++ " is " ++ 
-          toString (validateString model )) ]
-    ]
+  let
+    res = validateString model
+  in 
+    div [ ]
+      [ input
+          [ type' "text",
+            placeholder "{( () )}",
+            value model.expression,
+            name "phrase",
+            autofocus True,
+            onInput address UpdateExpression,
+            strStyle
+          ]
+          [ ],
+        --button [ class "change" ] [ text "Change" ],
+        h2
+          [ revStyle]
+          [ text (model.expression ++ isValid res) ], 
+        h3 
+          [] [text ( "Stack " ++ (isStackEmpty res.stack) )],
+        stackList res.stack 
+      ]
+
+isStackEmpty : SStack -> String
+isStackEmpty s = 
+  if String.length s == 0 then 
+    "Empty"
+  else
+    ""
+
+isValid : Model -> String 
+isValid bm = 
+  let 
+    {expression, stack, isValid} = bm
+  in 
+    case (isEmpty stack, isValid) of 
+      (True, True) -> " is valid"
+      (False, _) -> " is imbalanced"
+      (_, False) -> " is invalid"
+
+
+stackList : SStack -> Html 
+stackList stack = 
+  let 
+    entryItems = String.reverse (stack ++ "-")
+        |> String.toList 
+        |> List.indexedMap (,) 
+        |> List.reverse
+    items = List.map stackItem entryItems 
+  in
+      ul [ ] items 
+
 
 entryList : Address Action -> List BPair -> Html
 entryList address entries =
   let
     entryItems = List.map (entryItem address) entries
-    items = entryItems -- ++ [ totalItem (totalPoints entries) ]
+    items = entryItems 
   in
     --ul [ bracStyle] items
      ul [ ] items
@@ -308,7 +337,8 @@ initialModel =
         newPair '{' '}' True 2, 
         newPair '<' '>' True 3
       ], 
-    stack = empty 
+    stack = empty,
+    isValid = True
   }
 
 
@@ -362,7 +392,7 @@ revStyle =
     [ ("width", "100%")
     , ("height", "40px")
     , ("padding", "10px 0")
-    , ("font-size", "2em")
+    , ("font-size", "1")
     , ("text-align", "center")
     , ("color", "red")
     ]
