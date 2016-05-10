@@ -194,6 +194,23 @@ li .points {
   float: left;
 }
 
+li .index {
+  position: absolute;
+  top: 18px;
+  left: 200px;
+  float: right;
+  color: gray;
+}
+
+
+li .token {
+  position: absolute;
+  top: 18px;
+  right: 200px;
+  float: left;
+  color: #f60;
+}
+
 
 li .label {
   position: absolute;

@@ -10898,7 +10898,7 @@ Elm.Bracket.make = function (_elm) {
    var revStyle = $Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "width",_1: "100%"}
                                                  ,{ctor: "_Tuple2",_0: "height",_1: "40px"}
                                                  ,{ctor: "_Tuple2",_0: "padding",_1: "10px 0"}
-                                                 ,{ctor: "_Tuple2",_0: "font-size",_1: "2em"}
+                                                 ,{ctor: "_Tuple2",_0: "font-size",_1: "1"}
                                                  ,{ctor: "_Tuple2",_0: "text-align",_1: "center"}
                                                  ,{ctor: "_Tuple2",_0: "color",_1: "red"}]));
    var strStyle = $Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "width",_1: "100%"}
@@ -10914,6 +10914,21 @@ Elm.Bracket.make = function (_elm) {
    });
    var pageHeader = A2($Html.h1,_U.list([]),_U.list([A2(title,"Validator",1)]));
    var bracketHeader = A2($Html.h2,_U.list([]),_U.list([A2(title,"Bracket Map",1)]));
+   var isStackEmpty = function (s) {    return _U.eq($String.length(s),0) ? "Empty" : "";};
+   var stackItem = function (_p0) {
+      var _p1 = _p0;
+      return A2($Html.li,
+      _U.list([]),
+      _U.list([A2($Html.span,_U.list([$Html$Attributes.$class("index")]),_U.list([$Html.text($Basics.toString(_p1._0))]))
+              ,A2($Html.span,_U.list([$Html$Attributes.$class("token")]),_U.list([$Html.text($String.fromChar(_p1._1))]))]));
+   };
+   var stackList = function (stack) {
+      var entryItems = $List.reverse(A2($List.indexedMap,
+      F2(function (v0,v1) {    return {ctor: "_Tuple2",_0: v0,_1: v1};}),
+      $String.toList($String.reverse(A2($Basics._op["++"],stack,"-")))));
+      var items = A2($List.map,stackItem,entryItems);
+      return A2($Html.ul,_U.list([]),items);
+   };
    var matchEnabledOpenrX = F2(function (o,bp) {    return bp.isEnabled && _U.eq(bp.opener,o);});
    var getClosr3 = F2(function (opener,bmap) {
       return A2($Maybe.map,function (_) {    return _.closer;},A2($List$Extra.find,matchEnabledOpenrX(opener),bmap));
@@ -10922,10 +10937,10 @@ Elm.Bracket.make = function (_elm) {
       return $List.head(A2($List.map,function (_) {    return _.opener;},A2($List.filter,matchEnabledOpenrX(o),bmap)));
    });
    var getClosr2 = F2(function (o,bmap) {
-      var getPair = function (_p0) {
-         var _p1 = _p0;
-         var _p2 = _p1.isEnabled;
-         if (_p2 === true) {
-               return {ctor: "_Tuple2",_0: _p1.opener,_1: _p1.closer};
+      var getPair = function (_p2) {
+         var _p3 = _p2;
+         var _p4 = _p3.isEnabled;
+         if (_p4 === true) {
+               return {ctor: "_Tuple2",_0: _p3.opener,_1: _p3.closer};
             } else {
                return {ctor: "_Tuple2",_0: _U.chr("
