@@ -10908,7 +10908,7 @@ Elm.Bracket.make = function (_elm) {
                                                  ,{ctor: "_Tuple2",_0: "text-align",_1: "center"}]));
    var pageFooter = A2($Html.footer,
    _U.list([]),
-   _U.list([A2($Html.a,_U.list([$Html$Attributes.href("http://edu.kgisl.com")]),_U.list([$Html.text("KGISL CampSite")]))]));
+   _U.list([A2($Html.a,_U.list([$Html$Attributes.href("http://edu.kgisl.com")]),_U.list([$Html.text("The Campus Inside")]))]));
    var title = F2(function (message,times) {
       return $Html.text($String.trimRight(A2($String.repeat,times,$String.toUpper(A2($Basics._op["++"],message," ")))));
    });
