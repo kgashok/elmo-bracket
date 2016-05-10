@@ -183,17 +183,16 @@ li .phrase {
   position: absolute;
   top: 18px;
   left: 80px;
+  float: right;
 }
 
-.phrase { float:right }
 
 li .points {
   position: absolute;
   top: 18px;
   right: 80px;
+  float: left;
 }
-
-.points { float:left }
 
 
 li .label {
