@@ -303,8 +303,10 @@ stackList stack =
         |> List.reverse
     items = List.map stackItem entryItems 
   in
-      ul [ ] items 
-
+    div [ ]
+    [
+      ul [ ] items
+    ]
 
 entryList : Address Action -> List BPair -> Html
 entryList address entries =
