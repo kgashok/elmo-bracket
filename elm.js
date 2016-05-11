@@ -10898,7 +10898,7 @@ Elm.Bracket.make = function (_elm) {
    var revStyle = $Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "width",_1: "100%"}
                                                  ,{ctor: "_Tuple2",_0: "height",_1: "40px"}
                                                  ,{ctor: "_Tuple2",_0: "padding",_1: "10px 0"}
-                                                 ,{ctor: "_Tuple2",_0: "font-size",_1: "1"}
+                                                 ,{ctor: "_Tuple2",_0: "font-size",_1: "2em"}
                                                  ,{ctor: "_Tuple2",_0: "text-align",_1: "center"}
                                                  ,{ctor: "_Tuple2",_0: "color",_1: "red"}]));
    var strStyle = $Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "width",_1: "100%"}
