@@ -1,6 +1,6 @@
 # elmo-bracket
-Implementation of Interactive visual bracket validator
-
+Implementation of Interactive visual bracket validator.  
+For ideas on how to use and extend this project, see [this](challenge.md)
 
 ## Version 0 
 Simple validator 
