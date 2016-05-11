@@ -10927,7 +10927,7 @@ Elm.Bracket.make = function (_elm) {
       F2(function (v0,v1) {    return {ctor: "_Tuple2",_0: v0,_1: v1};}),
       $String.toList($String.reverse(A2($Basics._op["++"],stack,"-")))));
       var items = A2($List.map,stackItem,entryItems);
-      return A2($Html.ul,_U.list([]),items);
+      return A2($Html.div,_U.list([]),_U.list([A2($Html.ul,_U.list([]),items)]));
    };
    var matchEnabledOpenrX = F2(function (o,bp) {    return bp.isEnabled && _U.eq(bp.opener,o);});
    var getClosr3 = F2(function (opener,bmap) {
