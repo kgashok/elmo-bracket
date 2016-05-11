@@ -148,13 +148,13 @@ input[type="number"]:focus {
 }
 
 #wrapper { 
-  width: 600px; 
+  width: 650px; 
   border: 1px dotted black;
   overflow: hidden;
 }
 
 #first { 
-  /*width: 320px; */
+  /*width: 350px; */
   float: left;
   border: 1px solid blue;
   
@@ -202,7 +202,7 @@ li.total {
 li .phrase {
   position: absolute;
   top: 18px;
-  left: 80px;
+  left: 60px;
   float: right;
 }
 
@@ -210,14 +210,14 @@ li .phrase {
 li .points {
   position: absolute;
   top: 18px;
-  right: 80px;
+  right: 60px;
   float: left;
 }
 
 li .index {
   position: absolute;
   top: 18px;
-  left: 80px;
+  left: 120px;
   float: right;
   color: green;
 }
@@ -226,7 +226,7 @@ li .index {
 li .token {
   position: absolute;
   top: 18px;
-  right: 80px;
+  right: 120px;
   float: left;
   color: orange;
 }
