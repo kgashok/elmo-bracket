@@ -392,7 +392,7 @@ revStyle =
     [ ("width", "100%")
     , ("height", "40px")
     , ("padding", "10px 0")
-    , ("font-size", "1")
+    , ("font-size", "2em")
     , ("text-align", "center")
     , ("color", "red")
     ]
