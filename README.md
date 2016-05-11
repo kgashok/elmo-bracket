@@ -14,3 +14,7 @@ Simple validator with bracket pairs that can be dynamically disabled, enabled
 ## Version 2.0 
 Stack is now visible, with more meaningful error messages enabled. 
 ![Version 2](img/dynamicValidatorWithStack.png)
+
+### Version 2.1 
+CSS-enhanced Validator; with stack and bracket placed side-by-side
+![Version 2.1](img/cssEnhancedValidator.png)
