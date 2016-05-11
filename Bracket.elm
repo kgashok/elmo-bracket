@@ -255,8 +255,8 @@ entryForm : Address Action -> Model -> Html
 entryForm address model =
   let
     res = validateString model
-  in 
-    div [ ]
+  in
+    div [id "second" ]
       [ input
           [ type' "text",
             placeholder "{( () )}",
@@ -270,7 +270,7 @@ entryForm address model =
         --button [ class "change" ] [ text "Change" ],
         h2
           [ revStyle]
-          [ text (model.expression ++ isValid res) ], 
+          [ text (model.expression ++ isValid res) ],
         h3 
           [] [text ( "Stack " ++ (isStackEmpty res.stack) )],
         stackList res.stack 
@@ -323,10 +323,17 @@ view address model =
   div 
     [ id "container" ]
     [ pageHeader,
-      entryForm address model,
-      bracketHeader,
-      entryList address model.bmap,
-      pageFooter
+
+      div [id "wrapper"] 
+      [ div [id "first"] 
+          [ entryForm address model ],
+
+        div [id "second"]
+          [ bracketHeader,
+            entryList address model.bmap,
+            pageFooter ]
+      ]
+
     ]
 
 
