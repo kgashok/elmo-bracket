@@ -147,6 +147,26 @@ input[type="number"]:focus {
   transition: border-color 0.3s ease-in;
 }
 
+#wrapper { 
+  width: 600px; 
+  border: 1px dotted black;
+  overflow: hidden;
+}
+
+#first { 
+  /*width: 320px; */
+  float: left;
+  border: 1px solid blue;
+  
+  display: inline-block;
+}
+
+#second { 
+  border: 1px solid green;
+  display: inline-block;
+  vertical-align: top;
+}
+
 ul {
   margin: 20px 0;
   padding: 0;
@@ -197,7 +217,7 @@ li .points {
 li .index {
   position: absolute;
   top: 18px;
-  left: 200px;
+  left: 80px;
   float: right;
   color: green;
 }
@@ -206,9 +226,9 @@ li .index {
 li .token {
   position: absolute;
   top: 18px;
-  right: 200px;
+  right: 80px;
   float: left;
-  color: #f60;
+  color: orange;
 }
 
 
