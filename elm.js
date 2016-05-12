@@ -10943,4 +10943,189 @@ Elm.Bracket.make = function (_elm) {
          if (_p4 === true) {
                return {ctor: "_Tuple2",_0: _p3.opener,_1: _p3.closer};
             } else {
-               return {ctor: "_Tuple2",_0: _U.chr("
+               return {ctor: "_Tuple2",_0: _U.chr(" "),_1: _U.chr(" ")};
+            }
+      };
+      return A2($Dict.get,o,$Dict.fromList(A2($List.map,getPair,bmap)));
+   });
+   var matchEnabledOpenr = F2(function (o,bp) {    return bp.isEnabled ? _U.eq(bp.opener,o) ? $Maybe.Just(bp.closer) : $Maybe.Nothing : $Maybe.Nothing;});
+   var getClosr = F2(function (o,bm) {    return $List.head(A2($List.filterMap,matchEnabledOpenr(o),bm));});
+   var isClosr = F2(function (c,bmap) {
+      return A2($List.member,c,A2($List.map,function (_) {    return _.closer;},A2($List.filter,function (_) {    return _.isEnabled;},bmap)));
+   });
+   var isOpenr = F2(function (o,bmap) {
+      return A2($List.member,o,A2($List.map,function (_) {    return _.opener;},A2($List.filter,function (_) {    return _.isEnabled;},bmap)));
+   });
+   var isEmpty = function (s) {    return $String.isEmpty(s) ? true : false;};
+   var isValid = function (bm) {
+      var _p5 = bm;
+      var expression = _p5.expression;
+      var stack = _p5.stack;
+      var isValid = _p5.isValid;
+      var _p6 = {ctor: "_Tuple2",_0: isEmpty(stack),_1: isValid};
+      if (_p6._0 === true) {
+            if (_p6._1 === true) {
+                  return " is valid";
+               } else {
+                  return " is invalid";
+               }
+         } else {
+            return " is imbalanced";
+         }
+   };
+   var peek = function (stack) {    return A3($String.slice,0,1,stack);};
+   var pop = function (stacks) {    return $String.uncons(stacks);};
+   var push = F2(function (tok,stacks) {    return A2($Basics._op["++"],tok,stacks);});
+   var pushC = F2(function (c,s) {    return A2(push,$String.fromChar(c),s);});
+   var empty = "";
+   var updateS = F2(function (s,rec) {    return _U.update(rec,{stack: s});});
+   var updateE = F2(function (e,rec) {    return _U.update(rec,{expression: e});});
+   var validate = function (model) {
+      validate: while (true) {
+         var _p7 = model;
+         var expression = _p7.expression;
+         var stack = _p7.stack;
+         var bmap = _p7.bmap;
+         var _p8 = pop(expression);
+         if (_p8.ctor === "Nothing") {
+               return _U.update(model,{isValid: isEmpty(stack)});
+            } else {
+               var _p12 = _p8._0._0;
+               var _p11 = _p8._0._1;
+               var _p9 = A2(getClosr,_p12,bmap);
+               if (_p9.ctor === "Just") {
+                     var _v6 = A2(updateS,A2(pushC,_p9._0,stack),A2(updateE,_p11,model));
+                     model = _v6;
+                     continue validate;
+                  } else {
+                     if (_U.eq(A2(isClosr,_p12,bmap),true)) {
+                           var _p10 = pop(stack);
+                           if (_p10.ctor === "Just") {
+                                 if (_U.eq(_p10._0._0,_p12)) {
+                                       var _v8 = A2(updateS,_p10._0._1,A2(updateE,_p11,model));
+                                       model = _v8;
+                                       continue validate;
+                                    } else return _U.update(model,{isValid: false});
+                              } else {
+                                 return _U.update(model,{isValid: false});
+                              }
+                        } else {
+                           var _v9 = _U.update(model,{expression: _p11});
+                           model = _v9;
+                           continue validate;
+                        }
+                  }
+            }
+      }
+   };
+   var validateString = function (model) {
+      var res = validate(model);
+      var _p13 = A2($Debug.watch,"Result ",{ctor: "_Tuple3",_0: res.isValid,_1: res.stack,_2: res.expression});
+      return res;
+   };
+   var update = F2(function (action,model) {
+      var _p14 = action;
+      switch (_p14.ctor)
+      {case "NoOp": return model;
+         case "UpdateExpression": return _U.update(model,{expression: _p14._0});
+         default: var updateEntry = function (e) {    return _U.eq(e.id,_p14._0) ? _U.update(e,{isEnabled: $Basics.not(e.isEnabled)}) : e;};
+           return _U.update(model,{bmap: A2($List.map,updateEntry,model.bmap)});}
+   });
+   var Mark = function (a) {    return {ctor: "Mark",_0: a};};
+   var entryItem = F2(function (address,entry) {
+      return A2($Html.li,
+      _U.list([$Html$Attributes.classList(_U.list([{ctor: "_Tuple2",_0: "highlight",_1: entry.isEnabled}])),A2($Html$Events.onClick,address,Mark(entry.id))]),
+      _U.list([A2($Html.span,_U.list([$Html$Attributes.$class("phrase")]),_U.list([$Html.text($String.fromChar(entry.opener))]))
+              ,A2($Html.span,_U.list([$Html$Attributes.$class("points")]),_U.list([$Html.text($String.fromChar(entry.closer))]))]));
+   });
+   var entryList = F2(function (address,entries) {
+      var entryItems = A2($List.map,entryItem(address),entries);
+      var items = entryItems;
+      return A2($Html.ul,_U.list([]),items);
+   });
+   var UpdateExpression = function (a) {    return {ctor: "UpdateExpression",_0: a};};
+   var NoOp = {ctor: "NoOp"};
+   var newPair = F4(function (op,cl,en,id) {    return {opener: op,closer: cl,isEnabled: en,id: id};});
+   var initialModel = {expression: ""
+                      ,bmap: _U.list([A4(newPair,_U.chr("("),_U.chr(")"),true,1)
+                                     ,A4(newPair,_U.chr("{"),_U.chr("}"),true,2)
+                                     ,A4(newPair,_U.chr("<"),_U.chr(">"),true,3)])
+                      ,stack: empty
+                      ,isValid: true};
+   var Model = F4(function (a,b,c,d) {    return {expression: a,stack: b,bmap: c,isValid: d};});
+   var BPair = F4(function (a,b,c,d) {    return {opener: a,closer: b,isEnabled: c,id: d};});
+   var onInput = F2(function (address,f) {
+      return A3($Html$Events.on,"input",$Html$Events.targetValue,function (v) {    return A2($Signal.message,address,f(v));});
+   });
+   var entryForm = F2(function (address,model) {
+      var res = validateString(model);
+      return A2($Html.div,
+      _U.list([$Html$Attributes.id("second")]),
+      _U.list([A2($Html.input,
+              _U.list([$Html$Attributes.type$("text")
+                      ,$Html$Attributes.placeholder("{( () )}")
+                      ,$Html$Attributes.value(model.expression)
+                      ,$Html$Attributes.name("phrase")
+                      ,$Html$Attributes.autofocus(true)
+                      ,A2(onInput,address,UpdateExpression)
+                      ,strStyle]),
+              _U.list([]))
+              ,A2($Html.h2,_U.list([revStyle]),_U.list([$Html.text(A2($Basics._op["++"],model.expression,isValid(res)))]))
+              ,A2($Html.h3,_U.list([]),_U.list([$Html.text(A2($Basics._op["++"],"Stack ",isStackEmpty(res.stack)))]))
+              ,stackList(res.stack)]));
+   });
+   var view = F2(function (address,model) {
+      return A2($Html.div,
+      _U.list([$Html$Attributes.id("container")]),
+      _U.list([pageHeader
+              ,A2($Html.div,
+              _U.list([$Html$Attributes.id("wrapper")]),
+              _U.list([A2($Html.div,_U.list([$Html$Attributes.id("first")]),_U.list([A2(entryForm,address,model)]))
+                      ,A2($Html.div,_U.list([$Html$Attributes.id("second")]),_U.list([bracketHeader,A2(entryList,address,model.bmap),pageFooter]))]))]));
+   });
+   var main = $StartApp$Simple.start({model: initialModel,view: view,update: update});
+   return _elm.Bracket.values = {_op: _op
+                                ,onInput: onInput
+                                ,BPair: BPair
+                                ,Model: Model
+                                ,newPair: newPair
+                                ,NoOp: NoOp
+                                ,UpdateExpression: UpdateExpression
+                                ,Mark: Mark
+                                ,update: update
+                                ,updateE: updateE
+                                ,updateS: updateS
+                                ,validate: validate
+                                ,validateString: validateString
+                                ,empty: empty
+                                ,push: push
+                                ,pop: pop
+                                ,peek: peek
+                                ,isEmpty: isEmpty
+                                ,pushC: pushC
+                                ,isOpenr: isOpenr
+                                ,isClosr: isClosr
+                                ,matchEnabledOpenr: matchEnabledOpenr
+                                ,getClosr: getClosr
+                                ,getClosr2: getClosr2
+                                ,matchEnabledOpenrX: matchEnabledOpenrX
+                                ,getClosr3: getClosr3
+                                ,getClosr4: getClosr4
+                                ,stackItem: stackItem
+                                ,entryItem: entryItem
+                                ,entryForm: entryForm
+                                ,isStackEmpty: isStackEmpty
+                                ,isValid: isValid
+                                ,stackList: stackList
+                                ,entryList: entryList
+                                ,view: view
+                                ,initialModel: initialModel
+                                ,main: main
+                                ,title: title
+                                ,pageHeader: pageHeader
+                                ,bracketHeader: bracketHeader
+                                ,pageFooter: pageFooter
+                                ,strStyle: strStyle
+                                ,revStyle: revStyle
+                                ,bracStyle: bracStyle};
+};
