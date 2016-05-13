@@ -1,0 +1,22 @@
+Elm.SStack = Elm.SStack || {};
+Elm.SStack.make = function (_elm) {
+   "use strict";
+   _elm.SStack = _elm.SStack || {};
+   if (_elm.SStack.values) return _elm.SStack.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm),
+   $String = Elm.String.make(_elm);
+   var _op = {};
+   var isEmpty = function (s) {    return $String.isEmpty(s) ? true : false;};
+   var peek = function (stack) {    return A3($String.slice,0,1,stack);};
+   var pop = function (stacks) {    return $String.uncons(stacks);};
+   var push = F2(function (tok,stacks) {    return A2($Basics._op["++"],tok,stacks);});
+   var pushC = F2(function (c,s) {    return A2(push,$String.fromChar(c),s);});
+   var empty = "";
+   return _elm.SStack.values = {_op: _op,empty: empty,push: push,pop: pop,peek: peek,isEmpty: isEmpty,pushC: pushC};
+};
