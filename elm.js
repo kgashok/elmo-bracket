@@ -10891,6 +10891,28 @@ Elm.BingoUtils.make = function (_elm) {
    });
    return _elm.BingoUtils.values = {_op: _op,onInput: onInput,parseInt: parseInt};
 };
+Elm.SStack = Elm.SStack || {};
+Elm.SStack.make = function (_elm) {
+   "use strict";
+   _elm.SStack = _elm.SStack || {};
+   if (_elm.SStack.values) return _elm.SStack.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm),
+   $String = Elm.String.make(_elm);
+   var _op = {};
+   var isEmpty = function (s) {    return $String.isEmpty(s) ? true : false;};
+   var peek = function (stack) {    return A3($String.slice,0,1,stack);};
+   var pop = function (stacks) {    return $String.uncons(stacks);};
+   var push = F2(function (tok,stacks) {    return A2($Basics._op["++"],tok,stacks);});
+   var pushC = F2(function (c,s) {    return A2(push,$String.fromChar(c),s);});
+   var empty = "";
+   return _elm.SStack.values = {_op: _op,empty: empty,push: push,pop: pop,peek: peek,isEmpty: isEmpty,pushC: pushC};
+};
 Elm.Bracket = Elm.Bracket || {};
 Elm.Bracket.make = function (_elm) {
    "use strict";
@@ -10908,6 +10930,7 @@ Elm.Bracket.make = function (_elm) {
    $List$Extra = Elm.List.Extra.make(_elm),
    $Maybe = Elm.Maybe.make(_elm),
    $Result = Elm.Result.make(_elm),
+   $SStack = Elm.SStack.make(_elm),
    $Signal = Elm.Signal.make(_elm),
    $StartApp$Simple = Elm.StartApp.Simple.make(_elm),
    $String = Elm.String.make(_elm);
@@ -10937,13 +10960,29 @@ Elm.Bracket.make = function (_elm) {
    });
    var pageHeader = A2($Html.h1,_U.list([]),_U.list([A2(title,"Validator",1)]));
    var bracketHeader = A2($Html.h2,_U.list([]),_U.list([A2(title,"Bracket Map",1)]));
+   var isValid = function (bm) {
+      var _p0 = bm;
+      var expression = _p0.expression;
+      var stack = _p0.stack;
+      var isValid = _p0.isValid;
+      var _p1 = {ctor: "_Tuple2",_0: $SStack.isEmpty(stack),_1: isValid};
+      if (_p1._0 === true) {
+            if (_p1._1 === true) {
+                  return " is valid";
+               } else {
+                  return " is invalid";
+               }
+         } else {
+            return " is imbalanced";
+         }
+   };
    var isStackEmpty = function (s) {    return _U.eq($String.length(s),0) ? "Empty" : "";};
-   var stackItem = function (_p0) {
-      var _p1 = _p0;
+   var stackItem = function (_p2) {
+      var _p3 = _p2;
       return A2($Html.li,
       _U.list([]),
-      _U.list([A2($Html.span,_U.list([$Html$Attributes.$class("index")]),_U.list([$Html.text($Basics.toString(_p1._0))]))
-              ,A2($Html.span,_U.list([$Html$Attributes.$class("token")]),_U.list([$Html.text($String.fromChar(_p1._1))]))]));
+      _U.list([A2($Html.span,_U.list([$Html$Attributes.$class("index")]),_U.list([$Html.text($Basics.toString(_p3._0))]))
+              ,A2($Html.span,_U.list([$Html$Attributes.$class("token")]),_U.list([$Html.text($String.fromChar(_p3._1))]))]));
    };
    var stackList = function (stack) {
       var entryItems = $List.reverse(A2($List.indexedMap,
@@ -10960,11 +10999,11 @@ Elm.Bracket.make = function (_elm) {
       return $List.head(A2($List.map,function (_) {    return _.opener;},A2($List.filter,matchEnabledOpenrX(o),bmap)));
    });
    var getClosr2 = F2(function (o,bmap) {
-      var getPair = function (_p2) {
-         var _p3 = _p2;
-         var _p4 = _p3.isEnabled;
-         if (_p4 === true) {
-               return {ctor: "_Tuple2",_0: _p3.opener,_1: _p3.closer};
+      var getPair = function (_p4) {
+         var _p5 = _p4;
+         var _p6 = _p5.isEnabled;
+         if (_p6 === true) {
+               return {ctor: "_Tuple2",_0: _p5.opener,_1: _p5.closer};
             } else {
                return {ctor: "_Tuple2",_0: _U.chr(" "),_1: _U.chr(" ")};
             }
@@ -10979,28 +11018,6 @@ Elm.Bracket.make = function (_elm) {
    var isOpenr = F2(function (o,bmap) {
       return A2($List.member,o,A2($List.map,function (_) {    return _.opener;},A2($List.filter,function (_) {    return _.isEnabled;},bmap)));
    });
-   var isEmpty = function (s) {    return $String.isEmpty(s) ? true : false;};
-   var isValid = function (bm) {
-      var _p5 = bm;
-      var expression = _p5.expression;
-      var stack = _p5.stack;
-      var isValid = _p5.isValid;
-      var _p6 = {ctor: "_Tuple2",_0: isEmpty(stack),_1: isValid};
-      if (_p6._0 === true) {
-            if (_p6._1 === true) {
-                  return " is valid";
-               } else {
-                  return " is invalid";
-               }
-         } else {
-            return " is imbalanced";
-         }
-   };
-   var peek = function (stack) {    return A3($String.slice,0,1,stack);};
-   var pop = function (stacks) {    return $String.uncons(stacks);};
-   var push = F2(function (tok,stacks) {    return A2($Basics._op["++"],tok,stacks);});
-   var pushC = F2(function (c,s) {    return A2(push,$String.fromChar(c),s);});
-   var empty = "";
    var updateS = F2(function (s,rec) {    return _U.update(rec,{stack: s});});
    var updateE = F2(function (e,rec) {    return _U.update(rec,{expression: e});});
    var validate = function (model) {
@@ -11009,20 +11026,20 @@ Elm.Bracket.make = function (_elm) {
          var expression = _p7.expression;
          var stack = _p7.stack;
          var bmap = _p7.bmap;
-         var _p8 = pop(expression);
+         var _p8 = $SStack.pop(expression);
          if (_p8.ctor === "Nothing") {
-               return _U.update(model,{isValid: isEmpty(stack)});
+               return _U.update(model,{isValid: $SStack.isEmpty(stack)});
             } else {
                var _p12 = _p8._0._0;
                var _p11 = _p8._0._1;
                var _p9 = A2(getClosr,_p12,bmap);
                if (_p9.ctor === "Just") {
-                     var _v6 = A2(updateS,A2(pushC,_p9._0,stack),A2(updateE,_p11,model));
+                     var _v6 = A2(updateS,A2($SStack.pushC,_p9._0,stack),A2(updateE,_p11,model));
                      model = _v6;
                      continue validate;
                   } else {
                      if (_U.eq(A2(isClosr,_p12,bmap),true)) {
-                           var _p10 = pop(stack);
+                           var _p10 = $SStack.pop(stack);
                            if (_p10.ctor === "Just") {
                                  if (_U.eq(_p10._0._0,_p12)) {
                                        var _v8 = A2(updateS,_p10._0._1,A2(updateE,_p11,model));
@@ -11099,7 +11116,7 @@ Elm.Bracket.make = function (_elm) {
                       ,bmap: _U.list([A4(newPair,_U.chr("("),_U.chr(")"),true,1)
                                      ,A4(newPair,_U.chr("{"),_U.chr("}"),true,2)
                                      ,A4(newPair,_U.chr("<"),_U.chr(">"),true,3)])
-                      ,stack: empty
+                      ,stack: $SStack.empty
                       ,isValid: true};
    var main = $StartApp$Simple.start({model: initialModel,view: view,update: update});
    var Model = F4(function (a,b,c,d) {    return {expression: a,stack: b,bmap: c,isValid: d};});
@@ -11116,12 +11133,6 @@ Elm.Bracket.make = function (_elm) {
                                 ,updateS: updateS
                                 ,validate: validate
                                 ,validateString: validateString
-                                ,empty: empty
-                                ,push: push
-                                ,pop: pop
-                                ,peek: peek
-                                ,isEmpty: isEmpty
-                                ,pushC: pushC
                                 ,isOpenr: isOpenr
                                 ,isClosr: isClosr
                                 ,matchEnabledOpenr: matchEnabledOpenr

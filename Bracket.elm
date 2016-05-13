@@ -9,7 +9,7 @@ import String exposing (..)
 import Dict exposing (..)
 import List.Extra as Listx exposing (find)
 
---import SStack 
+import SStack as Stack exposing (..)
 import BingoUtils as Utils 
 
 
@@ -83,7 +83,7 @@ validate model =
   in 
     case (pop expression) of 
       Nothing -> 
-        {model| isValid = isEmpty stack }
+        {model| isValid = Stack.isEmpty stack }
 
       Just (tok, restExpr) -> 
         case (getClosr tok bmap) of 
@@ -115,39 +115,6 @@ validateString model  =
     _= Debug.watch "Result " (res.isValid, res.stack, res.expression)
   in 
     res
-
-
-type alias SStack = String
-
-empty : SStack
-empty =
-  ""
-
-push : String -> SStack -> SStack
-push tok stacks = 
-  tok ++ stacks
-
-
-pop : SStack -> Maybe (Char, SStack)
-pop stacks = 
-  String.uncons stacks
-
-
-peek: SStack -> String
-peek stack = 
-  String.slice 0 1 stack 
-
-
-isEmpty: SStack -> Bool 
-isEmpty s = 
-  if String.isEmpty s then
-    True
-  else
-    False 
-
-pushC: Char -> SStack -> SStack
-pushC c s = 
-  push (String.fromChar c) s
 
 
 isOpenr: Char -> List BPair -> Bool 
@@ -285,7 +252,7 @@ isValid bm =
   let 
     {expression, stack, isValid} = bm
   in 
-    case (isEmpty stack, isValid) of 
+    case (Stack.isEmpty stack, isValid) of 
       (True, True) -> " is valid"
       (False, _) -> " is imbalanced"
       (_, False) -> " is invalid"
@@ -343,7 +310,7 @@ initialModel =
         newPair '{' '}' True 2, 
         newPair '<' '>' True 3
       ], 
-    stack = empty,
+    stack = Stack.empty,
     isValid = True
   }
 
