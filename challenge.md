@@ -10,6 +10,9 @@ This will also come in handy as a teaching tool to convey
   - Objects (a stack and a map make up a validator)
   - "Dynamic" nature can be touched and felt by the student directly
 
+# To Do 
+Look at the [ToDo.md](ToDo.md) file.
+
 #### A MINI PROJECT CHALLENGE
 `Stage 1` : Mimic an equivalent functionality using any technology stack   
 `Stage 2` : Extend this project to become an `Infix to Postfix Expression` Evaluator    
