@@ -10869,27 +10869,27 @@ Elm.StartApp.Simple.make = function (_elm) {
    var Config = F3(function (a,b,c) {    return {model: a,view: b,update: c};});
    return _elm.StartApp.Simple.values = {_op: _op,Config: Config,start: start};
 };
-Elm.SStack = Elm.SStack || {};
-Elm.SStack.make = function (_elm) {
+Elm.BingoUtils = Elm.BingoUtils || {};
+Elm.BingoUtils.make = function (_elm) {
    "use strict";
-   _elm.SStack = _elm.SStack || {};
-   if (_elm.SStack.values) return _elm.SStack.values;
+   _elm.BingoUtils = _elm.BingoUtils || {};
+   if (_elm.BingoUtils.values) return _elm.BingoUtils.values;
    var _U = Elm.Native.Utils.make(_elm),
    $Basics = Elm.Basics.make(_elm),
    $Debug = Elm.Debug.make(_elm),
+   $Html = Elm.Html.make(_elm),
+   $Html$Events = Elm.Html.Events.make(_elm),
    $List = Elm.List.make(_elm),
    $Maybe = Elm.Maybe.make(_elm),
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm),
    $String = Elm.String.make(_elm);
    var _op = {};
-   var isEmpty = function (s) {    return $String.isEmpty(s) ? true : false;};
-   var peek = function (stack) {    return A3($String.slice,0,1,stack);};
-   var pop = function (stacks) {    return $String.uncons(stacks);};
-   var push = F2(function (tok,stacks) {    return A2($Basics._op["++"],tok,stacks);});
-   var pushC = F2(function (c,s) {    return A2(push,$String.fromChar(c),s);});
-   var empty = "";
-   return _elm.SStack.values = {_op: _op,empty: empty,push: push,pop: pop,peek: peek,isEmpty: isEmpty,pushC: pushC};
+   var parseInt = function (string) {    var _p0 = $String.toInt(string);if (_p0.ctor === "Ok") {    return _p0._0;} else {    return 0;}};
+   var onInput = F2(function (address,f) {
+      return A3($Html$Events.on,"input",$Html$Events.targetValue,function (v) {    return A2($Signal.message,address,f(v));});
+   });
+   return _elm.BingoUtils.values = {_op: _op,onInput: onInput,parseInt: parseInt};
 };
 Elm.Bracket = Elm.Bracket || {};
 Elm.Bracket.make = function (_elm) {
@@ -10898,6 +10898,7 @@ Elm.Bracket.make = function (_elm) {
    if (_elm.Bracket.values) return _elm.Bracket.values;
    var _U = Elm.Native.Utils.make(_elm),
    $Basics = Elm.Basics.make(_elm),
+   $BingoUtils = Elm.BingoUtils.make(_elm),
    $Debug = Elm.Debug.make(_elm),
    $Dict = Elm.Dict.make(_elm),
    $Html = Elm.Html.make(_elm),
@@ -11066,19 +11067,6 @@ Elm.Bracket.make = function (_elm) {
       return A2($Html.ul,_U.list([]),items);
    });
    var UpdateExpression = function (a) {    return {ctor: "UpdateExpression",_0: a};};
-   var NoOp = {ctor: "NoOp"};
-   var newPair = F4(function (op,cl,en,id) {    return {opener: op,closer: cl,isEnabled: en,id: id};});
-   var initialModel = {expression: ""
-                      ,bmap: _U.list([A4(newPair,_U.chr("("),_U.chr(")"),true,1)
-                                     ,A4(newPair,_U.chr("{"),_U.chr("}"),true,2)
-                                     ,A4(newPair,_U.chr("<"),_U.chr(">"),true,3)])
-                      ,stack: empty
-                      ,isValid: true};
-   var Model = F4(function (a,b,c,d) {    return {expression: a,stack: b,bmap: c,isValid: d};});
-   var BPair = F4(function (a,b,c,d) {    return {opener: a,closer: b,isEnabled: c,id: d};});
-   var onInput = F2(function (address,f) {
-      return A3($Html$Events.on,"input",$Html$Events.targetValue,function (v) {    return A2($Signal.message,address,f(v));});
-   });
    var entryForm = F2(function (address,model) {
       var res = validateString(model);
       return A2($Html.div,
@@ -11089,7 +11077,7 @@ Elm.Bracket.make = function (_elm) {
                       ,$Html$Attributes.value(model.expression)
                       ,$Html$Attributes.name("phrase")
                       ,$Html$Attributes.autofocus(true)
-                      ,A2(onInput,address,UpdateExpression)
+                      ,A2($BingoUtils.onInput,address,UpdateExpression)
                       ,strStyle]),
               _U.list([]))
               ,A2($Html.h2,_U.list([revStyle]),_U.list([$Html.text(A2($Basics._op["++"],model.expression,isValid(res)))]))
@@ -11105,9 +11093,18 @@ Elm.Bracket.make = function (_elm) {
               _U.list([A2($Html.div,_U.list([$Html$Attributes.id("first")]),_U.list([A2(entryForm,address,model)]))
                       ,A2($Html.div,_U.list([$Html$Attributes.id("second")]),_U.list([bracketHeader,A2(entryList,address,model.bmap),pageFooter]))]))]));
    });
+   var NoOp = {ctor: "NoOp"};
+   var newPair = F4(function (op,cl,en,id) {    return {opener: op,closer: cl,isEnabled: en,id: id};});
+   var initialModel = {expression: ""
+                      ,bmap: _U.list([A4(newPair,_U.chr("("),_U.chr(")"),true,1)
+                                     ,A4(newPair,_U.chr("{"),_U.chr("}"),true,2)
+                                     ,A4(newPair,_U.chr("<"),_U.chr(">"),true,3)])
+                      ,stack: empty
+                      ,isValid: true};
    var main = $StartApp$Simple.start({model: initialModel,view: view,update: update});
+   var Model = F4(function (a,b,c,d) {    return {expression: a,stack: b,bmap: c,isValid: d};});
+   var BPair = F4(function (a,b,c,d) {    return {opener: a,closer: b,isEnabled: c,id: d};});
    return _elm.Bracket.values = {_op: _op
-                                ,onInput: onInput
                                 ,BPair: BPair
                                 ,Model: Model
                                 ,newPair: newPair

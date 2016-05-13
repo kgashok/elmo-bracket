@@ -9,13 +9,8 @@ import String exposing (..)
 import Dict exposing (..)
 import List.Extra as Listx exposing (find)
 
-import SStack 
-
--- import BingoUtils as Utils 
-
-onInput : Address a -> (String -> a) -> Attribute
-onInput address f =
-  on "input" targetValue (\v -> Signal.message address (f v))
+--import SStack 
+import BingoUtils as Utils 
 
 
 
@@ -265,7 +260,7 @@ entryForm address model =
             value model.expression,
             name "phrase",
             autofocus True,
-            onInput address UpdateExpression,
+            Utils.onInput address UpdateExpression,
             strStyle
           ]
           [ ],
