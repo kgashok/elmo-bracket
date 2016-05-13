@@ -1,0 +1,23 @@
+Elm.Main = Elm.Main || {};
+Elm.Main.make = function (_elm) {
+   "use strict";
+   _elm.Main = _elm.Main || {};
+   if (_elm.Main.values) return _elm.Main.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $Graphics$Element = Elm.Graphics.Element.make(_elm),
+   $Http = Elm.Http.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm),
+   $Task = Elm.Task.make(_elm),
+   $Text = Elm.Text.make(_elm);
+   var _op = {};
+   var fibMailbox = $Signal.mailbox("");
+   var getFibTask = A2($Task.andThen,$Http.getString("http://localhost:5000/fibonacci/5"),$Signal.send(fibMailbox.address));
+   var getFib = Elm.Native.Task.make(_elm).perform(getFibTask);
+   var main = A2($Signal.map,function (_p0) {    return $Graphics$Element.leftAligned($Text.fromString(_p0));},fibMailbox.signal);
+   return _elm.Main.values = {_op: _op,fibMailbox: fibMailbox,getFibTask: getFibTask,main: main};
+};

@@ -1,0 +1,19 @@
+Elm.Datum = Elm.Datum || {};
+Elm.Datum.make = function (_elm) {
+   "use strict";
+   _elm.Datum = _elm.Datum || {};
+   if (_elm.Datum.values) return _elm.Datum.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm);
+   var _op = {};
+   var newPair = F2(function (op,cl) {    return {opener: op,closer: cl,isEnabled: true,id: 0};});
+   var initialModel = {expression: "",bmap: _U.list([A2(newPair,_U.chr("("),_U.chr(")")),A2(newPair,_U.chr("{"),_U.chr("}"))])};
+   var Model = F2(function (a,b) {    return {expression: a,bmap: b};});
+   var BPair = F4(function (a,b,c,d) {    return {opener: a,closer: b,isEnabled: c,id: d};});
+   return _elm.Datum.values = {_op: _op,BPair: BPair,Model: Model,newPair: newPair,initialModel: initialModel};
+};

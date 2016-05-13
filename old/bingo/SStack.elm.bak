@@ -1,0 +1,28 @@
+
+module SStack where
+
+import String
+
+type alias SStack = String
+
+empty : SStack
+empty =
+  ""
+
+pop : SStack -> Maybe (Char, SStack)
+pop stacks = 
+  String.uncons stacks
+
+
+push : String -> SStack -> SStack
+push tok stacks = 
+  tok ++ stacks
+
+
+reverse : SStack -> SStack
+reverse stack =
+  case (pop stack) of 
+    Nothing ->
+      empty
+    Just(x, r) -> 
+      push  (reverse r) (String.fromChar x)

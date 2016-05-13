@@ -1,0 +1,79 @@
+Elm.SStack = Elm.SStack || {};
+Elm.SStack.make = function (_elm) {
+   "use strict";
+   _elm.SStack = _elm.SStack || {};
+   if (_elm.SStack.values) return _elm.SStack.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm),
+   $String = Elm.String.make(_elm);
+   var _op = {};
+   var isClosr = function (c) {    return A2($List.member,c,_U.list([_U.chr(")")]));};
+   var isOpenr = function (o) {    return A2($List.member,o,_U.list([_U.chr("(")]));};
+   var isEmpty = function (s) {    return $String.isEmpty(s) ? true : false;};
+   var peek = function (stack) {    return A3($String.slice,0,1,stack);};
+   var pop = function (stacks) {    return $String.uncons(stacks);};
+   var push = F2(function (tok,stacks) {    return A2($Basics._op["++"],tok,stacks);});
+   var pushC = F2(function (c,s) {    return A2(push,$String.fromChar(c),s);});
+   var validate = F2(function (expr,stacks) {
+      validate: while (true) {
+         var _p0 = pop(expr);
+         if (_p0.ctor === "Just") {
+               var _p4 = _p0._0._0;
+               var _p3 = _p0._0._1;
+               if (isOpenr(_p4)) {
+                     var _v1 = _p3,_v2 = A2(pushC,_p4,stacks);
+                     expr = _v1;
+                     stacks = _v2;
+                     continue validate;
+                  } else if (isClosr(_p4)) {
+                        var _p1 = pop(stacks);
+                        if (_p1.ctor === "Just") {
+                              var _p2 = isClosr(_p1._0._0);
+                              if (_p2 === true) {
+                                    var _v5 = _p3,_v6 = _p1._0._1;
+                                    expr = _v5;
+                                    stacks = _v6;
+                                    continue validate;
+                                 } else {
+                                    return false;
+                                 }
+                           } else {
+                              return false;
+                           }
+                     } else {
+                        var _v7 = _p3,_v8 = stacks;
+                        expr = _v7;
+                        stacks = _v8;
+                        continue validate;
+                     }
+            } else {
+               return isEmpty(stacks);
+            }
+      }
+   });
+   var empty = "";
+   var reverse = function (stack) {
+      var _p5 = pop(stack);
+      if (_p5.ctor === "Nothing") {
+            return empty;
+         } else {
+            return A2(push,reverse(_p5._0._1),$String.fromChar(_p5._0._0));
+         }
+   };
+   return _elm.SStack.values = {_op: _op
+                               ,empty: empty
+                               ,push: push
+                               ,pop: pop
+                               ,peek: peek
+                               ,reverse: reverse
+                               ,isEmpty: isEmpty
+                               ,pushC: pushC
+                               ,isOpenr: isOpenr
+                               ,isClosr: isClosr
+                               ,validate: validate};
+};

@@ -1,0 +1,22 @@
+Elm.BingoUtils = Elm.BingoUtils || {};
+Elm.BingoUtils.make = function (_elm) {
+   "use strict";
+   _elm.BingoUtils = _elm.BingoUtils || {};
+   if (_elm.BingoUtils.values) return _elm.BingoUtils.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $Html = Elm.Html.make(_elm),
+   $Html$Events = Elm.Html.Events.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm),
+   $String = Elm.String.make(_elm);
+   var _op = {};
+   var parseInt = function (string) {    var _p0 = $String.toInt(string);if (_p0.ctor === "Ok") {    return _p0._0;} else {    return 0;}};
+   var onInput = F2(function (address,f) {
+      return A3($Html$Events.on,"input",$Html$Events.targetValue,function (v) {    return A2($Signal.message,address,f(v));});
+   });
+   return _elm.BingoUtils.values = {_op: _op,onInput: onInput,parseInt: parseInt};
+};
