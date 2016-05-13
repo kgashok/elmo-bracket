@@ -2,7 +2,7 @@
 
 ###Testing
 - Add unit testing framework from https://github.com/deadfoxygrandpa/elm-test
-	- Rudimentary testing of initialModel length 
+	- Rudimentary testing of `initialModel` length 
 
 ### Continuous Deployment
 - Continuous integration and deployment to be setup on Heroku
