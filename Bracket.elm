@@ -26,10 +26,10 @@ type alias BMap = List BPair
 
 type alias Model =
   {
-    expression: String, 
-    stack: SStack,
-    bmap: BMap,
-    isValid: Bool
+    expression: String, -- what the user inputs
+    stack: SStack,      -- integral ADT required for validation 
+    bmap: BMap,         -- containing list of bracket pairs
+    isValid: Bool       -- the ultimate outcome! 
   }
 
 -- Constructor function for creating new pairs 
@@ -141,6 +141,7 @@ matchEnabledOpenr o bp =
         Nothing 
   else 
     Nothing
+
 
 -- Four variants of the Closure function 
 getClosr: Char -> List BPair -> Maybe Char 
@@ -333,13 +334,16 @@ title message times =
     |> trimRight
     |> text
 
+
 pageHeader : Html
 pageHeader =
   h1 [ ] [ title "Validator" 1 ]
 
+
 bracketHeader : Html
 bracketHeader =
   h2 [ ] [ title "Bracket Map" 1 ]
+
 
 pageFooter : Html
 pageFooter =
