@@ -1,0 +1,29 @@
+Elm.Main = Elm.Main || {};
+Elm.Main.make = function (_elm) {
+   "use strict";
+   _elm.Main = _elm.Main || {};
+   if (_elm.Main.values) return _elm.Main.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $ElmTest = Elm.ElmTest.make(_elm),
+   $Graphics$Element = Elm.Graphics.Element.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm),
+   $String = Elm.String.make(_elm);
+   var _op = {};
+   var newPair = F2(function (op,cl) {    return {opener: op,closer: cl,isEnabled: true,id: 0};});
+   var BPair = F4(function (a,b,c,d) {    return {opener: a,closer: b,isEnabled: c,id: d};});
+   var bmap = _U.list([A2(newPair,_U.chr("("),_U.chr(")")),A2(newPair,_U.chr("{"),_U.chr("}"))]);
+   var tests = A2($ElmTest.suite,
+   "My Test Suite",
+   _U.list([A2($ElmTest.test,"Addition",A2($ElmTest.assertEqual,3 + 7,10))
+           ,A2($ElmTest.test,"String.reverse",A2($ElmTest.assertEqual,"ekiM",$String.reverse("Mike")))
+           ,A2($ElmTest.test,"This test should pass",$ElmTest.assert(true))
+           ,A2($ElmTest.test,"This test should fail",$ElmTest.assert(false))
+           ,A2($ElmTest.test,"Get enabled pair",A2($ElmTest.assertEqual,2,$List.length(bmap)))]));
+   var main = $ElmTest.elementRunner(tests);
+   return _elm.Main.values = {_op: _op,bmap: bmap,BPair: BPair,newPair: newPair,tests: tests,main: main};
+};
