@@ -20,12 +20,14 @@ tests = suite "My Test Suite"
 
   ]
 
+
+main : Element
+main = 
+    elementRunner tests
+
+
 {-
 main = 
   runDisplay tests
 
 -}
-
-main : Element
-main = 
-    elementRunner tests
