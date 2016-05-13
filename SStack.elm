@@ -1,4 +1,12 @@
 module SStack where 
+{-| This module defines the stack that is used in the Validator
+
+Ideally, a list must be used to implement a stack.
+
+But in this case, since we are only dealing with characters, I have 
+used the String itself as a sequence (aka list). 
+
+-}
 
 import String 
 
@@ -30,6 +38,7 @@ isEmpty s =
     True
   else
     False 
+
 
 pushC: Char -> SStack -> SStack
 pushC c s = 
