@@ -15,13 +15,18 @@ Elm.Main.make = function (_elm) {
    $Signal = Elm.Signal.make(_elm),
    $String = Elm.String.make(_elm);
    var _op = {};
+   var testm = _U.update($Bracket.initialModel,{expression: "()"});
    var tests = A2($ElmTest.suite,
    "My Test Suite",
    _U.list([A2($ElmTest.test,"Addition",A2($ElmTest.assertEqual,3 + 7,10))
            ,A2($ElmTest.test,"String.reverse",A2($ElmTest.assertEqual,"ekiM",$String.reverse("Mike")))
            ,A2($ElmTest.test,"This test should pass",$ElmTest.assert(true))
            ,A2($ElmTest.test,"This test should fail",$ElmTest.assert(false))
-           ,A2($ElmTest.test,"Get enabled pair",A2($ElmTest.assertEqual,3,$List.length($Bracket.initialModel.bmap)))]));
+           ,A2($ElmTest.test,"Get enabled pair",A2($ElmTest.assertEqual,3,$List.length($Bracket.initialModel.bmap)))
+           ,A2($ElmTest.test,"Test simple expression",A2($ElmTest.assertEqual,true,function (_) {    return _.isValid;}($Bracket.validateString(testm))))
+           ,A2($ElmTest.test,
+           "Test invalid expression",
+           A2($ElmTest.assertEqual,false,function (_) {    return _.isValid;}($Bracket.validateString(_U.update(testm,{expression: "({)"})))))]));
    var main = $ElmTest.elementRunner(tests);
-   return _elm.Main.values = {_op: _op,tests: tests,main: main};
+   return _elm.Main.values = {_op: _op,testm: testm,tests: tests,main: main};
 };

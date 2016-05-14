@@ -5,8 +5,8 @@ import Html.Events exposing (on, targetValue, onClick)
 import Html.Attributes exposing (..)
 import Signal exposing (Address)
 import StartApp.Simple as StartApp
-import String exposing (..)
-import Dict exposing (..)
+import String exposing (fromChar, length, reverse, toList, toUpper, repeat, trimRight)
+import Dict exposing (fromList, get)
 import List.Extra as Listx exposing (find)
 
 
@@ -82,7 +82,7 @@ validate model =
   in 
     case (pop expression) of 
       Nothing -> 
-        {model| isValid = Stack.isEmpty stack }
+        {model| isValid = isEmpty stack }
 
       Just (tok, restExpr) -> 
         case (getClosr tok bmap) of 
@@ -252,7 +252,7 @@ isValid bm =
   let 
     {expression, stack, isValid} = bm
   in 
-    case (Stack.isEmpty stack, isValid) of 
+    case (isEmpty stack, isValid) of 
       (True, True) -> " is valid"
       (False, _) -> " is imbalanced"
       (_, False) -> " is invalid"
