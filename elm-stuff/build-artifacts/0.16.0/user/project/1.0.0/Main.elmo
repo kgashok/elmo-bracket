@@ -26,7 +26,10 @@ Elm.Main.make = function (_elm) {
            ,A2($ElmTest.test,"Test simple expression",A2($ElmTest.assertEqual,true,function (_) {    return _.isValid;}($Bracket.validateString(testm))))
            ,A2($ElmTest.test,
            "Test invalid expression",
-           A2($ElmTest.assertEqual,false,function (_) {    return _.isValid;}($Bracket.validateString(_U.update(testm,{expression: "({)"})))))]));
+           A2($ElmTest.assertEqual,false,function (_) {    return _.isValid;}($Bracket.validate(_U.update(testm,{expression: "({)"})))))
+           ,A2($ElmTest.test,
+           "Imbalanced expression must display as so",
+           A2($ElmTest.assertEqual,"is imbalanced",$String.trimLeft($Bracket.isValid($Bracket.validate(_U.update(testm,{expression: "((({{"}))))))]));
    var main = $ElmTest.elementRunner(tests);
    return _elm.Main.values = {_op: _op,testm: testm,tests: tests,main: main};
 };

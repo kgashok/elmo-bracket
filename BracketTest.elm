@@ -2,7 +2,7 @@ import ElmTest exposing (..)
 import String exposing (..)
 import Graphics.Element exposing (..)
 
-import Bracket exposing (Model, validateString, initialModel)
+import Bracket exposing (Model, validate, isValid, validateString, initialModel)
 
 testm : Model
 testm = {initialModel| expression = "()"} 
@@ -16,8 +16,9 @@ tests = suite "My Test Suite"
   , test "Get enabled pair" (assertEqual 3 (List.length (initialModel.bmap)) )
   , test "Test simple expression" (assertEqual True (.isValid (validateString testm)))
   , test "Test invalid expression" (assertEqual False 
-            (.isValid (validateString {testm|expression = "({)"})))
-
+            (.isValid (validate {testm|expression = "({)"})))
+  , test "Imbalanced expression must display as so" (assertEqual "is imbalanced"
+            (String.trimLeft (isValid (validate {testm|expression = "((({{"} ))) )
   ]
 
 
