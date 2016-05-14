@@ -10965,7 +10965,8 @@ Elm.Bracket.make = function (_elm) {
       var expression = _p0.expression;
       var stack = _p0.stack;
       var isValid = _p0.isValid;
-      var _p1 = {ctor: "_Tuple2",_0: $SStack.isEmpty(stack),_1: isValid};
+      var isBalanced = _p0.isBalanced;
+      var _p1 = {ctor: "_Tuple2",_0: isBalanced,_1: isValid};
       if (_p1._0 === true) {
             if (_p1._1 === true) {
                   return " is valid";
@@ -11028,7 +11029,7 @@ Elm.Bracket.make = function (_elm) {
          var bmap = _p7.bmap;
          var _p8 = $SStack.pop(expression);
          if (_p8.ctor === "Nothing") {
-               return _U.update(model,{isValid: $SStack.isEmpty(stack)});
+               return _U.update(model,{isBalanced: $SStack.isEmpty(stack)});
             } else {
                var _p12 = _p8._0._0;
                var _p11 = _p8._0._1;
@@ -11047,7 +11048,7 @@ Elm.Bracket.make = function (_elm) {
                                        continue validate;
                                     } else return _U.update(model,{isValid: false});
                               } else {
-                                 return _U.update(model,{isValid: false});
+                                 return _U.update(model,{isBalanced: false});
                               }
                         } else {
                            var _v9 = _U.update(model,{expression: _p11});
@@ -11117,9 +11118,10 @@ Elm.Bracket.make = function (_elm) {
                                      ,A4(newPair,_U.chr("{"),_U.chr("}"),true,2)
                                      ,A4(newPair,_U.chr("<"),_U.chr(">"),true,3)])
                       ,stack: $SStack.empty
+                      ,isBalanced: true
                       ,isValid: true};
    var main = $StartApp$Simple.start({model: initialModel,view: view,update: update});
-   var Model = F4(function (a,b,c,d) {    return {expression: a,stack: b,bmap: c,isValid: d};});
+   var Model = F5(function (a,b,c,d,e) {    return {expression: a,stack: b,bmap: c,isBalanced: d,isValid: e};});
    var BPair = F4(function (a,b,c,d) {    return {opener: a,closer: b,isEnabled: c,id: d};});
    return _elm.Bracket.values = {_op: _op
                                 ,BPair: BPair

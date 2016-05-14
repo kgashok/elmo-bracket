@@ -19,6 +19,8 @@ tests = suite "My Test Suite"
             (.isValid (validate {testm|expression = "({)"})))
   , test "Imbalanced expression must display as so" (assertEqual "is imbalanced"
             (String.trimLeft (isValid (validate {testm|expression = "((({{"} ))) )
+  , test "Invalid expression must display as so" (assertEqual "is invalid"
+            (String.trimLeft (isValid (validate {testm|expression = "(>)"} ))) )
   ]
 
 

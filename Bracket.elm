@@ -29,6 +29,7 @@ type alias Model =
     expression: String, -- what the user inputs
     stack: SStack,      -- integral ADT required for validation 
     bmap: BMap,         -- containing list of bracket pairs
+    isBalanced: Bool,    -- intermediary result
     isValid: Bool       -- the ultimate outcome! 
   }
 
@@ -82,7 +83,7 @@ validate model =
   in 
     case (pop expression) of 
       Nothing -> 
-        {model| isValid = isEmpty stack }
+        {model| isBalanced = isEmpty stack }
 
       Just (tok, restExpr) -> 
         case (getClosr tok bmap) of 
@@ -101,7 +102,7 @@ validate model =
                   else 
                     { model| isValid = False} 
                 Nothing ->
-                  { model| isValid = False} 
+                  { model| isBalanced = False} 
             else
                 validate {model |expression = restExpr}
 
@@ -250,13 +251,12 @@ isStackEmpty s =
 isValid : Model -> String 
 isValid bm = 
   let 
-    {expression, stack, isValid} = bm
+    {expression, stack, isValid, isBalanced} = bm
   in 
-    case (isEmpty stack, isValid) of 
-      (True, True) -> " is valid"
-      (False, _) -> " is imbalanced"
-      (_, False) -> " is invalid"
-
+    case (isBalanced, isValid) of 
+      (True, True)   -> " is valid"
+      (False, _)     -> " is imbalanced"
+      (_, False)     -> " is invalid"
 
 stackList : SStack -> Html 
 stackList stack = 
@@ -311,6 +311,7 @@ initialModel =
         newPair '<' '>' True 3
       ], 
     stack = Stack.empty,
+    isBalanced = True, 
     isValid = True
   }
 
