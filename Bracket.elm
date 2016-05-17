@@ -258,12 +258,17 @@ isValid bm =
       (False, _)     -> " is imbalanced"
       (_, False)     -> " is invalid"
 
+getIndexedCharacters : String -> List (Int, Char)
+getIndexedCharacters =
+  List.indexedMap (,) << String.toList
+
 stackList : SStack -> Html 
 stackList stack = 
   let 
     entryItems = String.reverse (stack ++ "-")
-        |> String.toList 
-        |> List.indexedMap (,) 
+        --|> String.toList 
+        --|> List.indexedMap (,)
+        |> getIndexedCharacters 
         |> List.reverse
     items = List.map stackItem entryItems 
   in
