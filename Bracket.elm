@@ -5,7 +5,7 @@ import Html.Events exposing (on, targetValue, onClick)
 import Html.Attributes exposing (..)
 import Signal exposing (Address)
 import StartApp.Simple as StartApp
-import String exposing (fromChar, length, reverse, toList, toUpper, repeat, trimRight)
+import String exposing (..)
 import Dict exposing (fromList, get)
 import List.Extra as Listx exposing (find)
 
@@ -29,7 +29,7 @@ type alias Model =
     expression: String, -- what the user inputs
     stack: SStack,      -- integral ADT required for validation 
     bmap: BMap,         -- containing list of bracket pairs
-    isBalanced: Bool,    -- intermediary result
+    isBalanced: Bool,   -- intermediary result
     isValid: Bool       -- the ultimate outcome! 
   }
 
@@ -43,7 +43,7 @@ newPair op cl en id =
   }
 
 
--- UPDATE 
+-- UPDATE (aka CONTROL)
 
 type Action
   = NoOp
@@ -83,7 +83,7 @@ validate model =
   in 
     case (pop expression) of 
       Nothing -> 
-        {model| isBalanced = isEmpty stack }
+        {model| isBalanced = Stack.isEmpty stack }
 
       Just (tok, restExpr) -> 
         case (getClosr tok bmap) of 
@@ -104,7 +104,7 @@ validate model =
                 Nothing ->
                   { model| isBalanced = False} 
             else
-                validate {model |expression = restExpr}
+              validate {model |expression = restExpr}
 
 
       
@@ -135,13 +135,9 @@ isClosr c bmap =
 
 matchEnabledOpenr: Char -> BPair -> Maybe Char
 matchEnabledOpenr o bp = 
-  if bp.isEnabled then
-    if bp.opener == o then 
-        Just(bp.closer)
-    else 
-        Nothing 
-  else 
-    Nothing
+  case (bp.isEnabled, bp.opener == o) of 
+    (True, True) -> Just bp.closer 
+    _ -> Nothing 
 
 
 -- Four variants of the Closure function 
@@ -195,8 +191,7 @@ stackItem (index, token) =
     --[ classList [ ("highlight", entry.isEnabled) ],
     --  onClick address (Mark entry.id)
     --]
-    [ -- span [][text "opener -   "], 
-      span [ class "index" ] [ text (toString index) ],
+    [ span [ class "index" ] [ text (toString index) ],
       span [ class "token" ] [ text (String.fromChar token) ]
       -- span [][text "   - closer"] 
       -- button [ class "delete", onClick address (Delete entry.id) ] []
@@ -209,8 +204,7 @@ entryItem address entry =
     [ classList [ ("highlight", entry.isEnabled) ],
       onClick address (Mark entry.id)
     ]
-    [ -- span [][text "opener -   "], 
-      span [ class "phrase" ] [ text (String.fromChar entry.opener) ],
+    [ span [ class "phrase" ] [ text (String.fromChar entry.opener) ],
       span [ class "points" ] [ text (String.fromChar entry.closer) ]
       -- span [][text "   - closer"] 
       -- button [ class "delete", onClick address (Delete entry.id) ] []
@@ -265,14 +259,13 @@ getIndexedCharacters =
 stackList : SStack -> Html 
 stackList stack = 
   let 
-    entryItems = String.reverse stack -- (stack ++ "-")
-        --|> String.toList 
-        --|> List.indexedMap (,)
+    entryItems = 
+      String.reverse stack 
         |> getIndexedCharacters 
         |> List.reverse
     items = List.map stackItem (entryItems ++ [(-1, '-')] ) 
   in
-    div [ ]
+    div [ ] 
     [
       ul [ ] items
     ]
