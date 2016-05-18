@@ -10989,8 +10989,8 @@ Elm.Bracket.make = function (_elm) {
               ,A2($Html.span,_U.list([$Html$Attributes.$class("token")]),_U.list([$Html.text($String.fromChar(_p4._1))]))]));
    };
    var stackList = function (stack) {
-      var entryItems = $List.reverse(getIndexedCharacters($String.reverse(A2($Basics._op["++"],stack,"-"))));
-      var items = A2($List.map,stackItem,entryItems);
+      var entryItems = $List.reverse(getIndexedCharacters($String.reverse(stack)));
+      var items = A2($List.map,stackItem,A2($Basics._op["++"],entryItems,_U.list([{ctor: "_Tuple2",_0: -1,_1: _U.chr("-")}])));
       return A2($Html.div,_U.list([]),_U.list([A2($Html.ul,_U.list([]),items)]));
    };
    var matchEnabledOpenrX = F2(function (o,bp) {    return bp.isEnabled && _U.eq(bp.opener,o);});

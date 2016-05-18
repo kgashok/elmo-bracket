@@ -265,12 +265,12 @@ getIndexedCharacters =
 stackList : SStack -> Html 
 stackList stack = 
   let 
-    entryItems = String.reverse (stack ++ "-")
+    entryItems = String.reverse stack -- (stack ++ "-")
         --|> String.toList 
         --|> List.indexedMap (,)
         |> getIndexedCharacters 
         |> List.reverse
-    items = List.map stackItem entryItems 
+    items = List.map stackItem (entryItems ++ [(-1, '-')] ) 
   in
     div [ ]
     [
