@@ -11121,13 +11121,13 @@ Elm.Bracket.make = function (_elm) {
    });
    var NoOp = {ctor: "NoOp"};
    var newPair = F4(function (op,cl,en,id) {    return {opener: op,closer: cl,isEnabled: en,id: id};});
-   var initialModel = {expression: ""
+   var initialModel = {stack: $SStack.empty
+                      ,isBalanced: true
+                      ,isValid: true
+                      ,expression: ""
                       ,bmap: _U.list([A4(newPair,_U.chr("("),_U.chr(")"),true,1)
                                      ,A4(newPair,_U.chr("{"),_U.chr("}"),true,2)
-                                     ,A4(newPair,_U.chr("<"),_U.chr(">"),true,3)])
-                      ,stack: $SStack.empty
-                      ,isBalanced: true
-                      ,isValid: true};
+                                     ,A4(newPair,_U.chr("<"),_U.chr(">"),true,3)])};
    var main = $StartApp$Simple.start({model: initialModel,view: view,update: update});
    var Model = F5(function (a,b,c,d,e) {    return {expression: a,stack: b,bmap: c,isBalanced: d,isValid: e};});
    var BPair = F4(function (a,b,c,d) {    return {opener: a,closer: b,isEnabled: c,id: d};});

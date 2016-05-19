@@ -301,16 +301,18 @@ view address model =
 
 initialModel : Model
 initialModel =
-  { expression = "", 
+  { stack      = Stack.empty,
+    isBalanced = True, 
+    isValid    = True,
+    
+    expression = "", 
+    
     bmap = 
       [
         newPair '(' ')' True 1,
         newPair '{' '}' True 2, 
         newPair '<' '>' True 3
-      ], 
-    stack = Stack.empty,
-    isBalanced = True, 
-    isValid = True
+      ]
   }
 
 
