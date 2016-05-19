@@ -1,6 +1,10 @@
-## ToDo
+- [ ] a task list item
+- [ ] list syntax required
+- [ ] normal **formatting**, @mentions, #1234 refs
+- [ ] incomplete
+- [x] completed
 
-###Testing
+## ToDo
 
 - [x] Add unit testing framework from https://github.com/deadfoxygrandpa/elm-test
 - [x] Rudimentary testing of `initialModel` length
