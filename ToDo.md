@@ -12,6 +12,6 @@
 
 ### Misc
 - [ ] Hover over text to indicate how Validator is composed of by a Stack and a Map
-- [x] Remove dependency on .elmo files 
+- [x] Remove dependency on .elmo and .elmi files 
 - [x] Refactor indexing characters using [this](http://stackoverflow.com/questions/37281332/elm-code-for-splitting-a-string-into-list-of-tuples-containing-character-and-its/37281604#37281604)
   - Sample code available [here](markdown/indexedCharacters.elm.md)
