@@ -1,9 +1,3 @@
-- [ ] a task list item
-- [ ] list syntax required
-- [ ] normal **formatting**, @mentions, #1234 refs
-- [ ] incomplete
-- [x] completed
-
 ## ToDo
 
 - [x] Add unit testing framework from https://github.com/deadfoxygrandpa/elm-test
@@ -13,8 +7,8 @@
 
 
 ### Continuous Deployment
-- Continuous integration and deployment to be setup on Heroku
-	- Why not deploy Bracket to github.io? How can this be done? 
+- [ ] Continuous integration and deployment to be setup on Heroku
+	- [ ] Why not deploy Bracket to github.io? How can this be done? 
 
 ### Misc
 - [ ] Hover over text to indicate how Validator is composed of by a Stack and a Map
