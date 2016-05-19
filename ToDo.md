@@ -1,10 +1,11 @@
 ## ToDo
 
 ###Testing
-- Add unit testing framework from https://github.com/deadfoxygrandpa/elm-test
-	- [x] Rudimentary testing of `initialModel` length
-	- [x] `validate` function tests added - here's a [snapshot](img/unitTests.png).
-	- [ ] Must attempt BDD style testing as well 
+
+- [x] Add unit testing framework from https://github.com/deadfoxygrandpa/elm-test
+- [x] Rudimentary testing of `initialModel` length
+- [x] `validate` function tests added - here's a [snapshot](img/unitTests.png).
+- [ ] Must attempt BDD style testing as well 
 
 
 ### Continuous Deployment
