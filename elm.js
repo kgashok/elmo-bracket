@@ -10955,9 +10955,7 @@ Elm.Bracket.make = function (_elm) {
    var pageFooter = A2($Html.footer,
    _U.list([]),
    _U.list([A2($Html.a,_U.list([$Html$Attributes.href("http://edu.kgisl.com")]),_U.list([$Html.text("The Campus Inside")]))]));
-   var title = F2(function (message,times) {
-      return $Html.text($String.trimRight(A2($String.repeat,times,$String.toUpper(A2($Basics._op["++"],message," ")))));
-   });
+   var title = F2(function (message,times) {    return $Html.text($String.trimRight(A2($String.repeat,times,A2($Basics._op["++"],message," "))));});
    var pageHeader = A2($Html.h1,_U.list([]),_U.list([A2(title,"Validator",1)]));
    var bracketHeader = A2($Html.h2,_U.list([]),_U.list([A2(title,"Bracket Map",1)]));
    var getIndexedCharacters = function (_p0) {

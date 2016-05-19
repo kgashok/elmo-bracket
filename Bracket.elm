@@ -328,7 +328,7 @@ main =
 title : String -> Int -> Html
 title message times =
   message ++ " "
-    |> toUpper
+    --|> toUpper
     |> repeat times
     |> trimRight
     |> text
