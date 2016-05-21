@@ -1,5 +1,9 @@
 #!/usr/bin/env python
 
+# Inspired by 
+# https://gitfu.wordpress.com/2008/05/25/git-describe-great-another-way-to-refer-to-commits/
+# http://gitready.com/beginner/2009/02/03/tagging.html
+
 #####################
 ## Get Version details
 ######################
