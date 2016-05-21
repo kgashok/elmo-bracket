@@ -11126,7 +11126,11 @@ Elm.Bracket.make = function (_elm) {
               ,A2($Html.h2,_U.list([revStyle]),_U.list([$Html.text(A2($Basics._op["++"],model.expression,isValid(res)))]))
               ,A2($Html.h3,_U.list([]),_U.list([$Html.text(A2($Basics._op["++"],"Stack ",isStackEmpty(res.stack)))]))
               ,stackList(res.stack)
-              ,A2($Html.footer,_U.list([]),_U.list([$Html.text($Version.version)]))]));
+              ,A2($Html.footer,
+              _U.list([]),
+              _U.list([A2($Html.a,
+              _U.list([$Html$Attributes.href("https://github.com/kgashok/elmo-bracket/issues/new")]),
+              _U.list([$Html.text($Version.version)]))]))]));
    });
    var view = F2(function (address,model) {
       return A2($Html.div,

@@ -236,7 +236,7 @@ entryForm address model =
           [] [text ( "Stack " ++ (isStackEmpty res.stack) )],
         stackList res.stack, 
         footer
-          [] [text version]
+          [] [a [href "https://github.com/kgashok/elmo-bracket/issues/new" ] [text version] ]
       ]
 
 isStackEmpty : SStack -> String
