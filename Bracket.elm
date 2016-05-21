@@ -12,6 +12,7 @@ import List.Extra as Listx exposing (find)
 
 import SStack as Stack exposing (..)
 import BingoUtils as Utils 
+import Version exposing (version)
 
 -- MODEL
 
@@ -185,6 +186,7 @@ getClosr4 o bmap =
 
 -- VIEW 
 
+
 stackItem : (Int, Char) -> Html 
 stackItem (index, token) = 
   li []
@@ -215,7 +217,7 @@ entryForm address model =
   let
     res = validateString model
   in
-    div [id "second" ]
+    div [ ] --id "second" ]
       [ input
           [ type' "text",
             placeholder "{( () )}",
@@ -232,7 +234,9 @@ entryForm address model =
           [ text (model.expression ++ isValid res) ],
         h3 
           [] [text ( "Stack " ++ (isStackEmpty res.stack) )],
-        stackList res.stack 
+        stackList res.stack, 
+        footer
+          [] [text version]
       ]
 
 isStackEmpty : SStack -> String
