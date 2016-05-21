@@ -10913,6 +10913,22 @@ Elm.SStack.make = function (_elm) {
    var empty = "";
    return _elm.SStack.values = {_op: _op,empty: empty,push: push,pop: pop,peek: peek,isEmpty: isEmpty,pushC: pushC};
 };
+Elm.Version = Elm.Version || {};
+Elm.Version.make = function (_elm) {
+   "use strict";
+   _elm.Version = _elm.Version || {};
+   if (_elm.Version.values) return _elm.Version.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm);
+   var _op = {};
+   var version = "v2.2-beta-2-g4802ec6";
+   return _elm.Version.values = {_op: _op,version: version};
+};
 Elm.Bracket = Elm.Bracket || {};
 Elm.Bracket.make = function (_elm) {
    "use strict";
@@ -10933,7 +10949,8 @@ Elm.Bracket.make = function (_elm) {
    $SStack = Elm.SStack.make(_elm),
    $Signal = Elm.Signal.make(_elm),
    $StartApp$Simple = Elm.StartApp.Simple.make(_elm),
-   $String = Elm.String.make(_elm);
+   $String = Elm.String.make(_elm),
+   $Version = Elm.Version.make(_elm);
    var _op = {};
    var bracStyle = $Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "width",_1: "100%"}
                                                   ,{ctor: "_Tuple2",_0: "height",_1: "40px"}
@@ -10993,7 +11010,6 @@ Elm.Bracket.make = function (_elm) {
       var items = A2($List.map,stackItem,A2($Basics._op["++"],entryItems,_U.list([{ctor: "_Tuple2",_0: -1,_1: _U.chr("-")}])));
       return A2($Html.div,_U.list([]),_U.list([A2($Html.ul,_U.list([]),items)]));
    };
-   var version = "v2.2-beta-0-g0fda8de";
    var matchEnabledOpenrX = F2(function (o,bp) {    return bp.isEnabled && _U.eq(bp.opener,o);});
    var getClosr3 = F2(function (opener,bmap) {
       return A2($Maybe.map,function (_) {    return _.closer;},A2($List$Extra.find,matchEnabledOpenrX(opener),bmap));
@@ -11110,7 +11126,7 @@ Elm.Bracket.make = function (_elm) {
               ,A2($Html.h2,_U.list([revStyle]),_U.list([$Html.text(A2($Basics._op["++"],model.expression,isValid(res)))]))
               ,A2($Html.h3,_U.list([]),_U.list([$Html.text(A2($Basics._op["++"],"Stack ",isStackEmpty(res.stack)))]))
               ,stackList(res.stack)
-              ,A2($Html.footer,_U.list([]),_U.list([$Html.text(version)]))]));
+              ,A2($Html.footer,_U.list([]),_U.list([$Html.text($Version.version)]))]));
    });
    var view = F2(function (address,model) {
       return A2($Html.div,
@@ -11153,7 +11169,6 @@ Elm.Bracket.make = function (_elm) {
                                 ,matchEnabledOpenrX: matchEnabledOpenrX
                                 ,getClosr3: getClosr3
                                 ,getClosr4: getClosr4
-                                ,version: version
                                 ,stackItem: stackItem
                                 ,entryItem: entryItem
                                 ,entryForm: entryForm
