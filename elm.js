@@ -10949,8 +10949,7 @@ Elm.Bracket.make = function (_elm) {
    $SStack = Elm.SStack.make(_elm),
    $Signal = Elm.Signal.make(_elm),
    $StartApp$Simple = Elm.StartApp.Simple.make(_elm),
-   $String = Elm.String.make(_elm),
-   $Version = Elm.Version.make(_elm);
+   $String = Elm.String.make(_elm);
    var _op = {};
    var bracStyle = $Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "width",_1: "100%"}
                                                   ,{ctor: "_Tuple2",_0: "height",_1: "40px"}
@@ -11125,12 +11124,7 @@ Elm.Bracket.make = function (_elm) {
               _U.list([]))
               ,A2($Html.h2,_U.list([revStyle]),_U.list([$Html.text(A2($Basics._op["++"],model.expression,isValid(res)))]))
               ,A2($Html.h3,_U.list([]),_U.list([$Html.text(A2($Basics._op["++"],"Stack ",isStackEmpty(res.stack)))]))
-              ,stackList(res.stack)
-              ,A2($Html.footer,
-              _U.list([]),
-              _U.list([A2($Html.a,
-              _U.list([$Html$Attributes.href("https://github.com/kgashok/elmo-bracket/issues/new")]),
-              _U.list([$Html.text($Version.version)]))]))]));
+              ,stackList(res.stack)]));
    });
    var view = F2(function (address,model) {
       return A2($Html.div,
