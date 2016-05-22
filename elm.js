@@ -10926,7 +10926,7 @@ Elm.Version.make = function (_elm) {
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm);
    var _op = {};
-   var version = "v2.2-beta-3-geda531a";
+   var version = "v2.3-beta-3-ge12fe4a";
    return _elm.Version.values = {_op: _op,version: version};
 };
 Elm.Bracket = Elm.Bracket || {};
@@ -10971,7 +10971,9 @@ Elm.Bracket.make = function (_elm) {
                                                  ,{ctor: "_Tuple2",_0: "text-align",_1: "center"}]));
    var pageFooter = A2($Html.footer,
    _U.list([]),
-   _U.list([A2($Html.a,_U.list([$Html$Attributes.href("http://edu.kgisl.com")]),_U.list([$Html.text("The Campus Inside")]))]));
+   _U.list([A2($Html.a,
+   _U.list([$Html$Attributes.href("http://edu.kgisl.com"),$Html$Attributes.target("_blank")]),
+   _U.list([$Html.text("The Campus Inside")]))]));
    var title = F2(function (message,times) {
       return $Html.text($String.trimRight(A2($String.repeat,times,$String.toUpper(A2($Basics._op["++"],message," ")))));
    });
@@ -11014,7 +11016,7 @@ Elm.Bracket.make = function (_elm) {
               ,A2($Html.footer,
               _U.list([]),
               _U.list([A2($Html.a,
-              _U.list([$Html$Attributes.href("https://github.com/kgashok/elmo-bracket/issues/new")]),
+              _U.list([$Html$Attributes.href("https://github.com/kgashok/elmo-bracket/issues/new"),$Html$Attributes.target("_blank")]),
               _U.list([$Html.text($Version.version)]))]))]));
    };
    var matchEnabledOpenrX = F2(function (o,bp) {    return bp.isEnabled && _U.eq(bp.opener,o);});

@@ -271,7 +271,9 @@ stackList stack =
     [
       ul [ ] items,
       footer
-        [ ] [a [href "https://github.com/kgashok/elmo-bracket/issues/new"] [text version] ]
+        [ ] [a [href "https://github.com/kgashok/elmo-bracket/issues/new", 
+                target "_blank"] 
+            [text version] ]
     ]
 
 entryList : Address Action -> List BPair -> Html
@@ -354,7 +356,7 @@ pageFooter : Html
 pageFooter =
   footer
     [ ]
-    [ a [ href "http://edu.kgisl.com" ] [ text "The Campus Inside" ] ]
+    [ a [ href "http://edu.kgisl.com", target "_blank"] [ text "The Campus Inside" ] ]
 
 
 strStyle : Attribute
