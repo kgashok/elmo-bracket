@@ -1,5 +1,8 @@
 ## ToDo
 
+This file will be deprecated. This is better managed through the "Issues" section in Github. 
+Moving the "Hover over" text requirement to there as well. 
+
 - [x] Add unit testing framework from https://github.com/deadfoxygrandpa/elm-test
 - [x] Rudimentary testing of `initialModel` length
 - [x] `validate` function tests added - here's a [snapshot](img/unitTests.png).

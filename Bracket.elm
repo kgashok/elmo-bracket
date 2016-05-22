@@ -217,7 +217,7 @@ entryForm address model =
   let
     res = validateString model
   in
-    div [ ] --id "second" ]
+    div [ ] -- id "second" ]
       [ input
           [ type' "text",
             placeholder "{( () )}",
@@ -234,9 +234,9 @@ entryForm address model =
           [ text (model.expression ++ isValid res) ],
         h3 
           [] [text ( "Stack " ++ (isStackEmpty res.stack) )],
-        stackList res.stack, 
-        footer
-          [] [a [href "https://github.com/kgashok/elmo-bracket/issues/new" ] [text version] ]
+        stackList res.stack 
+        -- footer
+         -- [] [a [href "https://github.com/kgashok/elmo-bracket/issues/new" ] [text version] ]
       ]
 
 isStackEmpty : SStack -> String
