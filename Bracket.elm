@@ -272,7 +272,8 @@ stackList stack =
       ul [ ] items,
       footer
         [ ] [a [href "https://github.com/kgashok/elmo-bracket/issues/new", 
-                target "_blank"] 
+                target "_blank", 
+                rel "noopener noreferrer"] 
             [text version] ]
     ]
 
@@ -356,7 +357,7 @@ pageFooter : Html
 pageFooter =
   footer
     [ ]
-    [ a [ href "http://edu.kgisl.com", target "_blank"] [ text "The Campus Inside" ] ]
+    [ a [ href "http://edu.kgisl.com", target "_blank", rel "noopener noreferrer"] [ text "The Campus Inside" ] ]
 
 
 strStyle : Attribute
