@@ -4,5 +4,5 @@ module Version where
 
 
 version : String 
-version = "v2.3-beta-4-g6b848e4"
+version = "v2.3-beta-5-g084f678"
 

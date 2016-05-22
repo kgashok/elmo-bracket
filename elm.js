@@ -10926,7 +10926,7 @@ Elm.Version.make = function (_elm) {
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm);
    var _op = {};
-   var version = "v2.3-beta-4-g6b848e4";
+   var version = "v2.3-beta-5-g084f678";
    return _elm.Version.values = {_op: _op,version: version};
 };
 Elm.Bracket = Elm.Bracket || {};
