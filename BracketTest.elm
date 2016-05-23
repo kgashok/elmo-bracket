@@ -14,7 +14,7 @@ tests =
   [ test "Addition" (assertEqual (3 + 7) 10)
   , test "String.reverse" (assertEqual "ekiM" (String.reverse "Mike"))
   , test "This test should pass" (assert True)
-  , test "This test should fail" (assert True)
+  , test "This test should fail" (assert False)
   , test "Get enabled pair" (assertEqual 3 (List.length (initialModel.bmap)) )
   , test "Test simple expression" (assertEqual True (.isValid (validateString testm)))
   , test "Test invalid expression" (assertEqual False 
@@ -34,7 +34,7 @@ consoleTests =
 
 main : Program Never
 main =
-    runSuite consoleTests
+    runSuiteHtml consoleTests
 
 {-main : Element
 main = 

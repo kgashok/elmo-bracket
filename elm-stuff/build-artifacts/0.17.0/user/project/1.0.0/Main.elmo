@@ -1,0 +1,83 @@
+var _user$project$Main$testm = _elm_lang$core$Native_Utils.update(
+	_user$project$Bracket$initialModel,
+	{expression: '()'});
+var _user$project$Main$tests = _elm_lang$core$Native_List.fromArray(
+	[
+		A2(
+		_elm_community$elm_test$ElmTest$test,
+		'Addition',
+		A2(_elm_community$elm_test$ElmTest$assertEqual, 3 + 7, 10)),
+		A2(
+		_elm_community$elm_test$ElmTest$test,
+		'String.reverse',
+		A2(
+			_elm_community$elm_test$ElmTest$assertEqual,
+			'ekiM',
+			_elm_lang$core$String$reverse('Mike'))),
+		A2(
+		_elm_community$elm_test$ElmTest$test,
+		'This test should pass',
+		_elm_community$elm_test$ElmTest$assert(true)),
+		A2(
+		_elm_community$elm_test$ElmTest$test,
+		'This test should fail',
+		_elm_community$elm_test$ElmTest$assert(false)),
+		A2(
+		_elm_community$elm_test$ElmTest$test,
+		'Get enabled pair',
+		A2(
+			_elm_community$elm_test$ElmTest$assertEqual,
+			3,
+			_elm_lang$core$List$length(_user$project$Bracket$initialModel.bmap))),
+		A2(
+		_elm_community$elm_test$ElmTest$test,
+		'Test simple expression',
+		A2(
+			_elm_community$elm_test$ElmTest$assertEqual,
+			true,
+			function (_) {
+				return _.isValid;
+			}(
+				_user$project$Bracket$validateString(_user$project$Main$testm)))),
+		A2(
+		_elm_community$elm_test$ElmTest$test,
+		'Test invalid expression',
+		A2(
+			_elm_community$elm_test$ElmTest$assertEqual,
+			false,
+			function (_) {
+				return _.isValid;
+			}(
+				_user$project$Bracket$validate(
+					_elm_lang$core$Native_Utils.update(
+						_user$project$Main$testm,
+						{expression: '({)'}))))),
+		A2(
+		_elm_community$elm_test$ElmTest$test,
+		'Imbalanced expression must display as so',
+		A2(
+			_elm_community$elm_test$ElmTest$assertEqual,
+			'is imbalanced',
+			_elm_lang$core$String$trimLeft(
+				_user$project$Bracket$isValid(
+					_user$project$Bracket$validate(
+						_elm_lang$core$Native_Utils.update(
+							_user$project$Main$testm,
+							{expression: '((({{'})))))),
+		A2(
+		_elm_community$elm_test$ElmTest$test,
+		'Invalid expression must display as so',
+		A2(
+			_elm_community$elm_test$ElmTest$assertEqual,
+			'is invalid',
+			_elm_lang$core$String$trimLeft(
+				_user$project$Bracket$isValid(
+					_user$project$Bracket$validate(
+						_elm_lang$core$Native_Utils.update(
+							_user$project$Main$testm,
+							{expression: '(>)'}))))))
+	]);
+var _user$project$Main$consoleTests = A2(_elm_community$elm_test$ElmTest$suite, 'All Tests', _user$project$Main$tests);
+var _user$project$Main$main = {
+	main: _elm_community$elm_test$ElmTest$runSuiteHtml(_user$project$Main$consoleTests)
+};
