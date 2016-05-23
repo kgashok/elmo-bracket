@@ -16,6 +16,9 @@ import SStack as Stack exposing (..)
 --import BingoUtils as Utils 
 import Version exposing (version)
 
+import Mouse
+import Keyboard
+
 -- MODEL
 
 type alias BPair = {
@@ -33,7 +36,9 @@ type alias Model =
     stack: SStack,      -- integral ADT required for validation 
     bmap: BMap,         -- containing list of bracket pairs
     isBalanced: Bool,   -- intermediary result
-    isValid: Bool       -- the ultimate outcome! 
+    isValid: Bool,      -- the ultimate outcome! 
+    showBracket: Bool,
+    showStack: Bool
   }
 
 -- Constructor function for creating new pairs 
@@ -53,22 +58,38 @@ type Msg
   = NoOp
   | UpdateExpression String
   | Mark Int
+  | MouseMsg Mouse.Position
+  | KeyMsg Keyboard.KeyCode
 
 
-update : Msg -> Model -> Model
-update action model =
-  case action of
+update : Msg -> Model -> (Model, Cmd Msg)
+update msg model =
+  case msg of
     NoOp ->
-      model
+      (model, Cmd.none)
   
     UpdateExpression contents ->
-        { model | expression = contents }
+      ({ model | expression = contents }, Cmd.none)
     Mark id ->
-        let
-          updateEntry e =
-            if e.id == id then { e | isEnabled = (not e.isEnabled) } else e
-        in
-          { model | bmap = List.map updateEntry model.bmap }
+      let
+        updateEntry e =
+          if e.id == id then { e | isEnabled = (not e.isEnabled) } else e
+      in
+        ({ model | bmap = List.map updateEntry model.bmap }, Cmd.none)
+
+    MouseMsg position ->
+      (model, Cmd.none)
+      
+    KeyMsg code ->
+      case code of 
+        2 -> 
+          ({model | showBracket = (not model.showBracket) }, Cmd.none)
+        17 ->
+          ({model | showStack = (not model.showStack)}, Cmd.none)
+        _ ->  
+          (model, Cmd.none)
+
+
 
 
 ---- Validator Related 
@@ -237,9 +258,8 @@ entryForm model =
         h2
           [ revStyle]
           [ text (model.expression ++ isValid res) ],
-        h3 
-          [] [text ( "Stack " ++ (isStackEmpty res.stack) )],
-        stackList res.stack 
+        stackHeader model.showStack res.stack,
+        stackList model.showStack res.stack 
       ]
 
 isStackEmpty : SStack -> String
@@ -263,14 +283,19 @@ getIndexedCharacters : String -> List (Int, Char)
 getIndexedCharacters =
   List.indexedMap (,) << String.toList
 
-stackList : SStack -> Html Msg
-stackList stack = 
-  let 
+stackList : Bool -> SStack -> Html Msg
+stackList display stack = 
+  let
     entryItems = 
       String.reverse stack 
         |> getIndexedCharacters 
         |> List.reverse
-    items = List.map stackItem (entryItems ++ [(-1, '-')] ) 
+    items = 
+      if display then 
+        List.map stackItem (entryItems ++ [(-1, '-')] )
+      else 
+        []
+
   in
     div [ ] 
     [
@@ -282,14 +307,14 @@ stackList stack =
             [text version] ]
     ]
 
-entryList : List BPair -> Html Msg
-entryList entries =
+entryList : Bool -> List BPair -> Html Msg
+entryList display entries =
   let
-    entryItems = List.map entryItem entries
-    items = entryItems 
+    entryItems = 
+      if display then List.map entryItem entries else []
   in
     --ul [ bracStyle] items
-     ul [ ] items
+     ul [ ] entryItems
 
 -- view : Address Action -> Model -> Html
 view : Model -> Html Msg
@@ -304,8 +329,8 @@ view model =
           [ entryForm model ],
 
         div [id "second"]
-          [ bracketHeader,
-            entryList model.bmap,
+          [ bracketHeader model.showBracket,
+            entryList model.showBracket model.bmap,
             pageFooter ]
       ]
 
@@ -325,17 +350,31 @@ initialModel =
         newPair '(' ')' True 1,
         newPair '{' '}' True 2, 
         newPair '<' '>' True 3
-      ]
+      ], 
+    showStack = False,
+    showBracket = False
   }
 
 
 -- WIRE IT ALL TOGETHER!
 
+init : (Model, Cmd Msg)
+init =
+  (initialModel , Cmd.none)
+
+subscriptions : Model -> Sub Msg
+subscriptions model =
+  Sub.batch
+    [ Mouse.clicks MouseMsg
+    , Keyboard.presses KeyMsg
+    ]
+
 main : Program Never
 main =
-  -- Html.program
-  Html.beginnerProgram
-    { model = initialModel, update = update, view = view } -- subscriptions = \_ -> Sub.none }
+  Html.program
+  -- Html.beginnerProgram
+    { init = init, update = update, view = view, subscriptions = subscriptions}
+  -- { init = init, update = update, view = view, subscriptions = \_ -> Sub.none }
 
 {-
 main: Signal Html
@@ -361,10 +400,19 @@ pageHeader =
   h1 [ ] [ title "Validator" 1 ]
 
 
-bracketHeader : Html Msg
-bracketHeader =
-  h2 [ ] [ title "Bracket Map" 1 ]
+bracketHeader : Bool -> Html Msg
+bracketHeader display =
+  if display then 
+    h2 [ ] [ title "Bracket Map" 1 ]
+  else 
+    div [ ] [ ] 
 
+stackHeader : Bool -> SStack -> Html Msg         
+stackHeader display stack =
+  if display then 
+    h3 [ ] [text ( "Stack " ++ (isStackEmpty stack) )]
+  else 
+    div [ ] [ ]
 
 pageFooter : Html Msg
 pageFooter =

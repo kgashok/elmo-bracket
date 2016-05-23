@@ -1,7 +1,10 @@
 {
     "elm-community/elm-test": "1.1.0",
     "elm-lang/virtual-dom": "1.0.0",
+    "elm-lang/mouse": "1.0.0",
     "evancz/elm-graphics": "1.0.0",
+    "elm-lang/dom": "1.0.0",
     "elm-lang/html": "1.0.0",
+    "elm-lang/keyboard": "1.0.0",
     "elm-lang/core": "4.0.1"
 }

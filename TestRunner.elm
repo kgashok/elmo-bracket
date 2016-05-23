@@ -1,18 +1,9 @@
-module Main where
+module Main exposing (..) -- where
 
-import Task
-import Console exposing (..)
-import Graphics.Element exposing (Element)
 import ElmTest exposing (..)
-
 import ElmTestBDDStyle exposing (..)
 import Dict exposing (..)
 
--- import BDD
-
---tests : Test
---tests =
---  BDD.tests
 
 type alias BPair = {
   opener: Char, 
@@ -88,7 +79,15 @@ tests =
         ]
 
 
+consoleTests : Test
+consoleTests =
+    suite "All Tests" tests
 
+main : Program Never
+main =
+    runSuiteHtml consoleTests
+
+{- 
 main : Element
 main =
     elementRunner tests
@@ -96,3 +95,5 @@ main =
 port runner : Signal (Task.Task x ())
 port runner =
     Console.run <| consoleRunner tests
+
+-}
