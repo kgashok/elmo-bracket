@@ -1,0 +1,21 @@
+var _user$project$SStack$isEmpty = function (s) {
+	return _elm_lang$core$String$isEmpty(s) ? true : false;
+};
+var _user$project$SStack$peek = function (stack) {
+	return A3(_elm_lang$core$String$slice, 0, 1, stack);
+};
+var _user$project$SStack$pop = function (stacks) {
+	return _elm_lang$core$String$uncons(stacks);
+};
+var _user$project$SStack$push = F2(
+	function (tok, stacks) {
+		return A2(_elm_lang$core$Basics_ops['++'], tok, stacks);
+	});
+var _user$project$SStack$pushC = F2(
+	function (c, s) {
+		return A2(
+			_user$project$SStack$push,
+			_elm_lang$core$String$fromChar(c),
+			s);
+	});
+var _user$project$SStack$empty = '';

@@ -1,4 +1,4 @@
-module BingoUtils where
+module BingoUtils exposing (..)
 {-| This modules defines various utility functions for the Bingo app.
 
 These functions involve fairly advanced features of Elm that we don't
@@ -9,13 +9,20 @@ might provide these functions.
 -}
 
 import String exposing (toInt)
-import Html exposing (Attribute)
+import Html exposing (Html, Attribute, div, text)
 import Html.Events exposing (on, targetValue)
-import Signal exposing (Address)
+-- import Signal exposing (Address)
+import Html.App as Html
 
-
+import Html.App
+{-
 onInput : Address a -> (String -> a) -> Attribute
 onInput address f =
+  on "input" targetValue (\v -> Signal.message address (f v))
+-}
+
+onInput : (String -> a) -> Attribute Msg
+onInput f =
   on "input" targetValue (\v -> Signal.message address (f v))
 
 

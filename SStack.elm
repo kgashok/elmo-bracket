@@ -1,4 +1,4 @@
-module SStack where 
+module SStack exposing (..) -- where
 {-| This module defines the stack that is used in the Validator
 
 Ideally, a list must be used to implement a stack.

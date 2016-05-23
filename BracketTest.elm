@@ -1,18 +1,20 @@
-import ElmTest exposing (..)
+module Main exposing (..) -- where
+
+import ElmTest exposing (..) 
 import String exposing (..)
-import Graphics.Element exposing (..)
+-- import Graphics.Element exposing (..)
 
 import Bracket exposing (Model, validate, isValid, validateString, initialModel)
 
 testm : Model
 testm = {initialModel| expression = "()"} 
 
-tests: Test
-tests = suite "My Test Suite"
+tests: List Test
+tests = 
   [ test "Addition" (assertEqual (3 + 7) 10)
   , test "String.reverse" (assertEqual "ekiM" (String.reverse "Mike"))
   , test "This test should pass" (assert True)
-  , test "This test should fail" (assert False)
+  , test "This test should fail" (assert True)
   , test "Get enabled pair" (assertEqual 3 (List.length (initialModel.bmap)) )
   , test "Test simple expression" (assertEqual True (.isValid (validateString testm)))
   , test "Test invalid expression" (assertEqual False 
@@ -26,10 +28,18 @@ tests = suite "My Test Suite"
   ]
 
 
-main : Element
+consoleTests : Test
+consoleTests =
+    suite "All Tests" tests
+
+main : Program Never
+main =
+    runSuite consoleTests
+
+{-main : Element
 main = 
     elementRunner tests
-
+-}
 
 {-
 main = 

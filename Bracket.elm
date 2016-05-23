@@ -1,17 +1,19 @@
-module Bracket where 
+module Bracket exposing (..) -- where 
 
 import Html exposing (..)
-import Html.Events exposing (on, targetValue, onClick)
+import Html.Events exposing (on, onInput, targetValue, onClick)
 import Html.Attributes exposing (..)
-import Signal exposing (Address)
-import StartApp.Simple as StartApp
+-- import Signal exposing (Address)
+-- import StartApp.Simple as StartApp
+import Html.App as Html
+
 import String exposing (..)
 import Dict exposing (fromList, get)
-import List.Extra as Listx exposing (find)
+-- import List.Extra as Listx exposing (find)
 
 
 import SStack as Stack exposing (..)
-import BingoUtils as Utils 
+--import BingoUtils as Utils 
 import Version exposing (version)
 
 -- MODEL
@@ -46,13 +48,14 @@ newPair op cl en id =
 
 -- UPDATE (aka CONTROL)
 
-type Action
+-- type Action
+type Msg 
   = NoOp
   | UpdateExpression String
   | Mark Int
 
 
-update : Action -> Model -> Model
+update : Msg -> Model -> Model
 update action model =
   case action of
     NoOp ->
@@ -113,7 +116,7 @@ validateString: Model -> Model
 validateString model  = 
   let 
     res = validate model  
-    _= Debug.watch "Result " (res.isValid, res.stack, res.expression)
+    --_= Debug.watch "Result " (res.isValid, res.stack, res.expression)
   in 
     res
 
@@ -168,12 +171,13 @@ matchEnabledOpenrX o bp =
   bp.isEnabled && bp.opener == o 
 
 
+{-
 getClosr3 : Char -> List BPair -> Maybe Char 
 getClosr3 opener bmap = 
   bmap 
     |> Listx.find (matchEnabledOpenrX opener)
     |> Maybe.map .closer 
-
+-}
   
 getClosr4 : Char -> List BPair -> Maybe Char 
 getClosr4 o bmap = 
@@ -187,7 +191,7 @@ getClosr4 o bmap =
 -- VIEW 
 
 
-stackItem : (Int, Char) -> Html 
+stackItem : (Int, Char) -> Html Msg
 stackItem (index, token) = 
   li []
     --[ classList [ ("highlight", entry.isEnabled) ],
@@ -200,20 +204,20 @@ stackItem (index, token) =
     ]
 
 
-entryItem : Address Action -> BPair -> Html
-entryItem address entry =
+entryItem : BPair -> Html Msg
+entryItem entry =
   li   
     [ classList [ ("highlight", entry.isEnabled) ],
-      onClick address (Mark entry.id)
+      onClick (Mark entry.id)
     ]
     [ span [ class "phrase" ] [ text (String.fromChar entry.opener) ],
       span [ class "points" ] [ text (String.fromChar entry.closer) ]
       -- span [][text "   - closer"] 
-      -- button [ class "delete", onClick address (Delete entry.id) ] []
+      -- button [ class "delete", onClick (Delete entry.id) ] []
     ]
       
-entryForm : Address Action -> Model -> Html
-entryForm address model =
+entryForm : Model -> Html Msg
+entryForm model =
   let
     res = validateString model
   in
@@ -224,7 +228,8 @@ entryForm address model =
             value model.expression,
             name "phrase",
             autofocus True,
-            Utils.onInput address UpdateExpression,
+            onInput UpdateExpression,
+            -- Utils.onInput UpdateExpression,
             strStyle
           ]
           [ ],
@@ -258,7 +263,7 @@ getIndexedCharacters : String -> List (Int, Char)
 getIndexedCharacters =
   List.indexedMap (,) << String.toList
 
-stackList : SStack -> Html 
+stackList : SStack -> Html Msg
 stackList stack = 
   let 
     entryItems = 
@@ -277,17 +282,18 @@ stackList stack =
             [text version] ]
     ]
 
-entryList : Address Action -> List BPair -> Html
-entryList address entries =
+entryList : List BPair -> Html Msg
+entryList entries =
   let
-    entryItems = List.map (entryItem address) entries
+    entryItems = List.map entryItem entries
     items = entryItems 
   in
     --ul [ bracStyle] items
      ul [ ] items
 
-view : Address Action -> Model -> Html
-view address model =
+-- view : Address Action -> Model -> Html
+view : Model -> Html Msg
+view model =
   
   div 
     [ id "container" ]
@@ -295,11 +301,11 @@ view address model =
 
       div [id "wrapper"] 
       [ div [id "first"] 
-          [ entryForm address model ],
+          [ entryForm model ],
 
         div [id "second"]
           [ bracketHeader,
-            entryList address model.bmap,
+            entryList model.bmap,
             pageFooter ]
       ]
 
@@ -325,6 +331,13 @@ initialModel =
 
 -- WIRE IT ALL TOGETHER!
 
+main : Program Never
+main =
+  -- Html.program
+  Html.beginnerProgram
+    { model = initialModel, update = update, view = view } -- subscriptions = \_ -> Sub.none }
+
+{-
 main: Signal Html
 main =
   StartApp.start
@@ -332,9 +345,9 @@ main =
       view = view,
       update = update
     }
+-}
 
-
-title : String -> Int -> Html
+title : String -> Int -> Html Msg
 title message times =
   message ++ " "
     |> toUpper
@@ -343,24 +356,24 @@ title message times =
     |> text
 
 
-pageHeader : Html
+pageHeader : Html Msg
 pageHeader =
   h1 [ ] [ title "Validator" 1 ]
 
 
-bracketHeader : Html
+bracketHeader : Html Msg
 bracketHeader =
   h2 [ ] [ title "Bracket Map" 1 ]
 
 
-pageFooter : Html
+pageFooter : Html Msg
 pageFooter =
   footer
     [ ]
     [ a [ href "http://edu.kgisl.com", target "_blank", rel "noopener noreferrer"] [ text "The Campus Inside" ] ]
 
 
-strStyle : Attribute
+strStyle : Attribute x
 strStyle =
   style
     [ ("width", "100%")
@@ -370,7 +383,7 @@ strStyle =
     , ("text-align", "center")
     ]
     
-revStyle : Attribute
+revStyle : Attribute x
 revStyle =
   style
     [ ("width", "100%")
@@ -381,7 +394,7 @@ revStyle =
     , ("color", "red")
     ]
 
-bracStyle : Attribute
+bracStyle : Attribute x
 bracStyle =
   style
     [ ("width", "100%")
