@@ -7224,7 +7224,7 @@ var _user$project$SStack$pushC = F2(
 	});
 var _user$project$SStack$empty = '';
 
-var _user$project$Version$version = 'v2.4-beta-3-gfb33394';
+var _user$project$Version$version = 'v3.0-beta-0-g9e7c87d';
 
 var _user$project$Bracket$bracStyle = _elm_lang$html$Html_Attributes$style(
 	_elm_lang$core$Native_List.fromArray(
