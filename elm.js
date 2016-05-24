@@ -8066,7 +8066,7 @@ var _user$project$SStack$pushC = F2(
 	});
 var _user$project$SStack$empty = '';
 
-var _user$project$Version$version = 'v3.0-beta-2-g9c18e2f';
+var _user$project$Version$version = 'v3.0-beta-5-g11e42ee';
 
 var _user$project$Bracket$bracStyle = _elm_lang$html$Html_Attributes$style(
 	_elm_lang$core$Native_List.fromArray(
