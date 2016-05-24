@@ -405,20 +405,22 @@ bracketHeader display =
   if display then 
     h2 [ ] [ title "Bracket Map" 1 ]
   else 
-    div [ ] [ ] 
+    h2 [ ] [ ] 
 
 stackHeader : Bool -> SStack -> Html Msg         
 stackHeader display stack =
   if display then 
     h3 [ ] [text ( "Stack " ++ (isStackEmpty stack) )]
   else 
-    div [ ] [ ]
+    h3 [ ] [ ]
 
 pageFooter : Html Msg
 pageFooter =
   footer
-    [ ]
-    [ a [ href "http://edu.kgisl.com", target "_blank", rel "noopener noreferrer"] [ text "The Campus Inside" ] ]
+    [ ] 
+    [ a [ href "http://edu.kgisl.com", target "_blank", rel "noopener noreferrer" ] 
+      [ text "The Campus Inside" ] 
+    ]
 
 
 strStyle : Attribute x

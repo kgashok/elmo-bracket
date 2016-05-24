@@ -8066,7 +8066,7 @@ var _user$project$SStack$pushC = F2(
 	});
 var _user$project$SStack$empty = '';
 
-var _user$project$Version$version = 'v3.0-beta-1-ga2ead42';
+var _user$project$Version$version = 'v3.0-beta-2-g9c18e2f';
 
 var _user$project$Bracket$bracStyle = _elm_lang$html$Html_Attributes$style(
 	_elm_lang$core$Native_List.fromArray(
@@ -8143,7 +8143,7 @@ var _user$project$Bracket$bracketHeader = function (display) {
 			[
 				A2(_user$project$Bracket$title, 'Bracket Map', 1)
 			])) : A2(
-		_elm_lang$html$Html$div,
+		_elm_lang$html$Html$h2,
 		_elm_lang$core$Native_List.fromArray(
 			[]),
 		_elm_lang$core$Native_List.fromArray(
@@ -8194,7 +8194,7 @@ var _user$project$Bracket$stackHeader = F2(
 						'Stack ',
 						_user$project$Bracket$isStackEmpty(stack)))
 				])) : A2(
-			_elm_lang$html$Html$div,
+			_elm_lang$html$Html$h3,
 			_elm_lang$core$Native_List.fromArray(
 				[]),
 			_elm_lang$core$Native_List.fromArray(
