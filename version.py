@@ -36,8 +36,19 @@ fileContent = fileContent + 'version = "' + version + '"\n\n'
 ##################
 ## Create file after backing up previous one, if it exists
 ##################
-fo = open ("Version.elm", "w+")
+fo = open ("Version.elm", "rw+")
 #print "Name of file opened ", fo.name 
 
-fo.write (fileContent)
+######
+# Is it really necessary to update? 
+######
+previous = fo.read() 
+#print (previous)
+
+if previous.find (version) != -1:
+	print ("Version.elm already up-to-date!")
+else: 
+	print ("Version.elm updated with " + version)
+	fo.write (fileContent)
+
 fo.close()
