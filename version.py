@@ -4,11 +4,12 @@
 # https://gitfu.wordpress.com/2008/05/25/git-describe-great-another-way-to-refer-to-commits/
 # http://gitready.com/beginner/2009/02/03/tagging.html
 
+
+versionFile = "Version.elm"
+
 #####################
 ## Get Version details
 ######################
-versionFile = "Version.elm"
-
 import commands
 status, version = commands.getstatusoutput ("git describe --tags --long")
 if not status: 
@@ -19,10 +20,6 @@ else:
 	# Need to exit gracefully
 	# Now it continues!!! 
 
-
-######
-# Is it really necessary to update? 
-######
 previous = None
 try:
 	fo = open (versionFile, "r")
@@ -30,13 +27,14 @@ try:
 	previous = fo.read()
 	#print (previous)
 	fo.close()
+	
 except:
 	print ("Creating new version file...")
 
-##################
-## Create file after backing up previous one, if it exists
-##################
 
+######
+# Is it really necessary to update? 
+######
 if previous and previous.find (version) != -1:
 	print ("Version.elm already up-to-date!")
 else: 
@@ -53,12 +51,14 @@ version : String \n\
 
 	fileContent = fileContent + 'version = "' + version + '"\n\n'
 
+	##################
+	## Just to be safe, we must backing up previous versionFile
+	##################
+	pass  # Not yet implemented 
+
 	fo = open (versionFile, "w+")
 	fo.write (fileContent)
 	#print (fileContent)
 	print ("Version.elm updated with " + version)
 	fo.close()
-
-
-
 
