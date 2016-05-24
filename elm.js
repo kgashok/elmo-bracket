@@ -8543,8 +8543,8 @@ var _user$project$Bracket$initialModel = {
 			true,
 			3)
 		]),
-	showStack: false,
-	showBracket: false
+	showStack: true,
+	showBracket: true
 };
 var _user$project$Bracket$init = {ctor: '_Tuple2', _0: _user$project$Bracket$initialModel, _1: _elm_lang$core$Platform_Cmd$none};
 var _user$project$Bracket$BPair = F4(

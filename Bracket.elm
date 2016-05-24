@@ -82,9 +82,9 @@ update msg model =
       
     KeyMsg code ->
       case code of 
-        2 -> 
+        2 ->  -- Ctrl-b
           ({model | showBracket = (not model.showBracket) }, Cmd.none)
-        17 ->
+        17 -> -- Ctrl-q
           ({model | showStack = (not model.showStack)}, Cmd.none)
         _ ->  
           (model, Cmd.none)
@@ -351,8 +351,8 @@ initialModel =
         newPair '{' '}' True 2, 
         newPair '<' '>' True 3
       ], 
-    showStack = False,
-    showBracket = False
+    showStack = True,
+    showBracket = True
   }
 
 
@@ -372,19 +372,10 @@ subscriptions model =
 main : Program Never
 main =
   Html.program
-  -- Html.beginnerProgram
     { init = init, update = update, view = view, subscriptions = subscriptions}
-  -- { init = init, update = update, view = view, subscriptions = \_ -> Sub.none }
+  -- Html.beginnerProgram
+    -- { init = init, update = update, view = view, subscriptions = \_ -> Sub.none }
 
-{-
-main: Signal Html
-main =
-  StartApp.start
-    { model = initialModel,
-      view = view,
-      update = update
-    }
--}
 
 title : String -> Int -> Html Msg
 title message times =
