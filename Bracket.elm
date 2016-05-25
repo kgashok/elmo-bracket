@@ -9,7 +9,7 @@ import Html.App as Html
 
 import String exposing (..)
 import Dict exposing (fromList, get)
--- import List.Extra as Listx exposing (find)
+import List.Extra as Listx exposing (find)
 
 
 import SStack as Stack exposing (..)
@@ -192,13 +192,12 @@ matchEnabledOpenrX o bp =
   bp.isEnabled && bp.opener == o 
 
 
-{-
 getClosr3 : Char -> List BPair -> Maybe Char 
 getClosr3 opener bmap = 
   bmap 
     |> Listx.find (matchEnabledOpenrX opener)
     |> Maybe.map .closer 
--}
+
   
 getClosr4 : Char -> List BPair -> Maybe Char 
 getClosr4 o bmap = 

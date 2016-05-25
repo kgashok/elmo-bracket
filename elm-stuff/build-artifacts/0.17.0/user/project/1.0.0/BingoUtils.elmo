@@ -1,0 +1,8 @@
+var _user$project$BingoUtils$parseInt = function (string) {
+	var _p0 = _elm_lang$core$String$toInt(string);
+	if (_p0.ctor === 'Ok') {
+		return _p0._0;
+	} else {
+		return 0;
+	}
+};
