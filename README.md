@@ -20,5 +20,5 @@ CSS-enhanced Validator; with stack and bracket placed side-by-side
 ![Version 2.1](img/cssEnhancedValidator.png)
 
 ### Version 2.2
-Now stack behaves like a typical Array-based stack (showing `-1`)
+Now stack exhibits an Array-based stack (showing `-1`)
 ![Version 2.2](img/v22Validator.jpg)
