@@ -17,8 +17,6 @@ if not status:
 else: 
 	print "git describe return bad status!"
 	version = "NA"
-	# Need to exit gracefully
-	# Now it continues!!! 
 
 previous = None
 try:
@@ -35,7 +33,9 @@ except:
 ######
 # Is it really necessary to update? 
 ######
-if previous and previous.find (version) != -1:
+if version == "NA": 
+	pass 
+elif previous and previous.find (version) != -1:
 	print ("Version.elm already up-to-date!")
 else: 
 	####################
