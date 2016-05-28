@@ -2,7 +2,7 @@
     "name": "Bracket Validator in Elm",
     "repository": "https://github.com/kgashok/elmo-bracket",
     "env": {
-        "ELM_COMPILE": "elm make Bracket.elm "
+        "ELM_COMPILE": "elm make Bracket.elm --output elm.js"
     },
     "buildpacks": [
         {
