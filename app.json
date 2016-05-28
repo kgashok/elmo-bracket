@@ -1,0 +1,15 @@
+{
+    "name": "Bracket Validator in Elm",
+    "repository": "https://github.com/kgashok/elmo-bracket",
+    "env": {
+        "ELM_COMPILE": "elm make Bracket.elm --output elm.js"
+    },
+    "buildpacks": [
+        {
+            "url": "https://github.com/srid/heroku-buildpack-elm"
+        },
+        {
+            "url": "https://github.com/hone/heroku-buildpack-static"
+        }
+    ]
+}
